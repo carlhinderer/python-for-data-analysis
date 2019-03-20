@@ -33,3 +33,58 @@ CHAPTER 02 - IPYTHON AND JUPYTER
     - To give a script access to variables defined in the iPython namespace:
 
         In [7]: %run my_script.py -i
+
+
+
+- IPython Keyboard Shortcuts 
+
+    (Note that Jupyter has additional commands for navigation)
+
+    Keyboard shortcut	    Description
+    ------------------------------------------------------------------------------------------------
+    Ctrl-P or up-arrow	    Search backward in command history starting with currently entered text
+    Ctrl-N or down-arrow	Search forward in command history starting with currently entered text
+    Ctrl-R	                Readline-style reverse history search (partial matching)
+    Ctrl-Shift-V	        Paste text from clipboard
+    Ctrl-C	                Interrupt currently executing code
+    Ctrl-A	                Move cursor to beginning of line
+    Ctrl-E	                Move cursor to end of line
+    Ctrl-K	                Delete text from cursor until end of line
+    Ctrl-U	                Discard all text on current line
+    Ctrl-F	                Move cursor forward one character
+    Ctrl-B	                Move cursor back one character
+    Ctrl-L	                Clear screen
+
+
+
+- IPython Magic Commands
+
+    Command	              Description
+    ----------------------------------------------------------------------------------------------------
+    %quickref	          Display the IPython Quick Reference Card
+    %magic	              Display detailed documentation for all of the available magic commands
+    %debug	              Enter the interactive debugger at the bottom of the last exception traceback
+    %hist	              Print command input (and optionally output) history
+    %pdb	              Automatically enter debugger after any exception
+    %paste	              Execute preformatted Python code from clipboard
+    %cpaste	              Open a special prompt for manually pasting Python code to be executed
+    %reset	              Delete all variables/names defined in interactive namespace
+    %page OBJECT	      Pretty-print the object and display it through a pager
+    %run script.py	      Run a Python script inside IPython
+    %prun statement	      Execute statement with cProfile and report the profiler output
+    %time statement	      Report the execution time of a single statement
+    %timeit statement	  Run a statement multiple times to compute an ensemble average execution time
+    %who, %who_ls, %whos  Display variables defined in interactive namespace
+    %xdel variable	      Delete a variable and attempt to clear any references to the object
+
+
+    - For example, the '%timeit' function will time the execution of any statement.
+
+        In [8]: a = np.random.randn(100, 100)
+
+        In [9]: %timeit np.dot(a, a)
+        10000 loops, best of 3: 20.9 µs per loop
+
+
+
+- 
