@@ -1,0 +1,65 @@
+------------------------------------------------------
+CHAPTER 01 - PRELIMINARIES
+------------------------------------------------------
+
+- Essential Python Libraries
+
+    1. NumPy ('Numerical Python', 2006)
+        - Includes fast multidimensional array 'ndarray'
+        - Functions for performing computations on elements and arrays
+        - Tools for reading and writing data
+        - Linear algebra, FFTs, random number generation
+        - Mature C API to enable python extensions to native C/C++ code 
+            (C/C++ can process ndarray without having to copy to different data structure)
+        - Often used as a container to pass data to functions and libraries
+
+    2. Pandas ('Panel Data', 2010)
+        - Includes structures designed to make working with structured/tabular data fast
+        - 'DataFrame' is a tabular, column-oriented data structure with row column labels
+        - 'Series' is a one-dimensional labeled array object
+        - Combines efficiency of NumPy with flexible data manipulation of SQL
+
+    3. Matplotlib (2003)
+        - Most popular library for creating plots and 2D visualizations
+        - Creates large plots suitable for publication
+
+    4. IPython (2001) and Jupyter (2014)
+        - IPython = better Python REPL
+        - Jupyter uses IPython as a kernel
+
+    5. SciPy (2001)
+        - Collection of packages addressing a large number of standard problems in scientific computing
+        - scipy.integrate = numerical integration and diff eq solvers
+        - scipy.linalg = linear algebra routines not found in numpy
+        - scipy.optimize = function optimizers and root finding algorithms
+        - scipy.signal = signal processing
+        - scipy.sparse = sparse matrix tools
+        - scipy.special = wrapper around 'SPECFUN' FORTRAN library
+        - scipy.stats = continuous and discrete probability distributions
+
+    6. Scikit-learn (2010)
+        - General-purpose machine language toolkit, predictive statistics
+        - Classification (SVM, nearest neighbors, random forest, logistic regression)
+        - Regression (lasso, ridge regression)
+        - Clustering (k-means, spectral)
+        - Dimensionality reduction (PCA, feature selection, matrix factorization)
+        - Model selection (grid search, cross-validation, metrics)
+        - Preprocessing (feature extraction, normalization)
+
+    7. statsmodels (2010)
+        - Contains algorithms for inferential statistics and econometrics
+        - Regression models (linear regression, linear models)
+        - ANOVA (analysis of variance)
+        - Time series analysis (AR, ARMA, ARIMA, VAR)
+        - Nonparametric methods (kernel density, kernel regression)
+        - Visualization of statistical model results
+
+
+
+- Import Naming Conventions
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import seaborn as sns
+    import statsmodels as sm
