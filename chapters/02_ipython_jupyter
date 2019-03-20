@@ -1,0 +1,35 @@
+------------------------------------------------------
+CHAPTER 02 - IPYTHON AND JUPYTER
+------------------------------------------------------
+
+- Jupyter Tips
+
+    - Almost all features (ie tab completion) that are available in IPython are also 
+        available in Jupyter.
+
+    - Using a '?' before or after a variable will display information about the object.
+
+        In [1]: b = [1, 2, 3]
+        In [2]: b?
+
+        In [3]: print?
+
+
+    - Using '??' will show a function's source code if posible
+
+        In [4]: add_numbers??
+
+    
+    - Wildcard characters can also be used in searches
+
+        In [5]: np.*load*?
+
+
+    - Any python script can be run with the '%run' command
+
+        In [6]: %run my_script.py
+
+
+    - To give a script access to variables defined in the iPython namespace:
+
+        In [7]: %run my_script.py -i
