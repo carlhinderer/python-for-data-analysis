@@ -87,4 +87,48 @@ CHAPTER 02 - IPYTHON AND JUPYTER
 
 
 
-- 
+- Matplotlib Integration
+
+    The '%matplotlib' magic function configures matplotlib's integration with the ipython shell or
+      Jupyter notebook.  It allows a plot to be printed in the output without matplotlib taking 
+      over the command shell.
+
+    # Command for ipython
+    In [10]: %matplotlib
+
+    # Command for jupyter
+    In [11]: %matplotlib inline
+
+    # Now, can display graph
+    In [12]: import matplotlib.pyplot as plt
+             plt.plot(np.random.randn(50).cumsum())
+
+
+
+- Python Dates and Times
+
+    In [13]: from datetime import datetime, date, time
+             dt = datetime(2011, 10, 29, 20, 30, 21)
+
+    In [14]: dt.day
+             29
+
+    In [15]: dt.minute
+             30
+
+
+    # Convert to a string
+    In [16]: dt.strftime('%m/%d/%Y %H:%M')
+    '10/29/2011 20:30'
+
+
+    # Replace values in datatime
+    In [17]: dt.replace(minute=0, second=0)
+
+
+    # Get the delta between 2 datetimes
+    In [18]: d2 = datetime(2011, 11, 15, 22, 30)
+             delta = d2 - dt
+
+    In [19]: delta
+    datetime.timedelta(17, 7179)
