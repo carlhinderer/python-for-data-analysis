@@ -1,0 +1,48 @@
+------------------------------------------------------
+CHAPTER 04 - NUMPY BASICS
+------------------------------------------------------
+
+- Numpy Efficiency
+
+    Numpy is very efficient with large arrays because
+      1. The entire array is contiguous in memory
+      2. Computations are performed without needing Python for loops
+
+
+    For an idea of how efficient they are, we create a NumPy array of one million integers,
+      and also an equivalent Python list.
+
+    >>> import numpy as np
+    >>> my_arr = np.arrange(1000000)
+    >>> my_list = list(range(1000000))
+
+    Now, lets multiply each sequence by 2:
+
+    >>> %time for i in range(10): my_arr2 = my_arr * 2
+    31 ms
+
+    >>> %time for i in range(10): my_list2 = [x*2 for x in my_list]
+    861 ms
+
+    Numpy-based algorithms tend to be 10-100x faster than pure Python.
+
+
+
+- The Numpy 'ndarray'
+
+    >>> import numpy as np
+
+    # Generate some random data
+    >>> data = np.random.randn(2, 3)
+    >>> data
+    array([[-0.2047, 0.4789, -0.5194],
+           [-0.5557, 1.9658, 1.3934]])
+
+    # Now, I can write mathematical operations with data
+    >>> data * 10
+    array([[ -2.0471,   4.7894,  -5.1944],
+           [ -5.5573,  19.6578,  13.9341]])
+
+    >>> data + data
+    array([[-0.4094,  0.9579, -1.0389],
+           [-1.1115,  3.9316,  2.7868]])
