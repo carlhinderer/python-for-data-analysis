@@ -175,3 +175,110 @@ CHAPTER 04 - NUMPY BASICS
     # Cast an array of strings to numbers
     >>> numeric_strings = np.array(['1.25', '-9.6', '42'], dptype=np.string_)
     >>> float_array = numeric_strings.astype(float)
+
+
+
+- Basic Arithmetic
+
+    Batch operations can be done on ndarrays without for loops.  This is known as 
+      'vectorization'.
+
+    >>> arr = np.array(d[1., 2., 3.], [4., 5., 6.])
+
+    >>> arr * arr
+    array([[ 1.,  2.,  3.],
+           [ 4.,  5.,  6.]])
+
+    >>> arr - arr
+    array([[ 0.,  0.,  0.],
+           [ 0.,  0.,  0.]])
+
+    >>> 1 / arr
+    array([[ 1.    ,  0.5   ,  0.3333],
+           [ 0.25  ,  0.2   ,  0.1667]])
+
+    >>> arr ** 0.5
+    array([[ 1.    ,  1.4142,  1.7321],
+           [ 2.    ,  2.2361,  2.4495]])
+
+
+    # Comparisons between arrays yield boolean arrays
+    >>> arr2 = np.array([[0., 4., 1.], [7., 2., 12.]])
+    >>> arr2 > arr
+    array([[False,  True, False],
+           [True, False,  True]], dtype=bool)
+
+
+
+- Basic Indexing and Slicing
+
+    # Indexing and slicing of 1D arrays is like other Python lists
+    >>> arr = np.arange(10)
+    >>> arr[5]
+    5
+    >>> arr[5:8]
+    array([5, 6, 7])
+
+
+    # Note that unlike with Python lists, slices are a view on the original array.  
+    # If values are changed in the slice, they are changed in the original array also.
+    # This is known as 'broadcasting'.
+
+    >>> slice = arr[5:8]
+    >>> slice[1] = 20
+    >>> arr
+    array([0, 1, 2, 3, 4, 5, 20, 7, 8, 9])
+
+    # The 'bare slice' will assign all slice values in the array
+    >>> slice[:] = 100
+    >>> arr
+    array([0, 1, 2, 3, 4, 100, 100, 100, 8, 9])
+
+    # To get a copy in a slice instead
+    >>> slice = arr[5:8].copy
+
+
+    # With higher dimensional arrays, the elements at each index are arrays 
+    #   rather than scalars.
+    >>> arr2d = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    >>> arr2d[2]
+    array([7, 8, 9])
+
+    >>> arr2d[2][0]
+    7
+
+
+    # Create a 2x2x3 3D array
+    >>> arr3d = np.array([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]])
+    >>> arr3d
+    array([[[ 1,  2,  3],
+            [ 4,  5,  6]],
+           [[ 7,  8,  9],
+            [10, 11, 12]]])
+
+    >>> arr3d[0]
+    array([[1, 2, 3],
+           [4, 5, 6]])
+
+    # Both scalar values and arrays can be assigned to arr3d[0]
+    >>> old_values = arr3d[0].copy()
+
+    # Assign to scalar
+    >>> arr3d[0] = 42
+    >>> arr3d
+    array([[[42, 42, 42],
+            [42, 42, 42]],
+           [[ 7,  8,  9],
+            [10, 11, 12]]])
+
+    # Assign to array
+    >>> arr3d[0] = old_values
+    >>> arr3d
+    array([[[ 1,  2,  3],
+            [ 4,  5,  6]],
+           [[ 7,  8,  9],
+            [10, 11, 12]]])
+
+    # Can access into multiple indexes
+    >>> arr3d[1, 0]
+    array([7, 8, 9])
