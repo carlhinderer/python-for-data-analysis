@@ -134,3 +134,44 @@ CHAPTER 04 - NUMPY BASICS
 
     eye, identity	           Create a square N × N identity matrix (1s on the diagonal and 0s 
                                elsewhere)
+
+
+
+- List of NumPy Data Types
+
+    Type
+    int8, uint8	                i1, u1	        Signed and unsigned 8-bit (1 byte) integer types
+    int16, uint16	            i2, u2	        Signed and unsigned 16-bit integer types
+    int32, uint32	            i4, u4	        Signed and unsigned 32-bit integer types
+    int64, uint64	            i8, u8	        Signed and unsigned 64-bit integer types
+    float16	                    f2	            Half-precision floating point
+    float32	                    f4 or f	        Single-precision floating point; compatible with C float
+    float64	                    f8 or d	        Double-precision floating point; compatible with C double / 
+                                                  Python float
+    float128	                f16 or g	    Extended-precision floating point
+    complex64,                  c8, c16, c32	Complex numbers represented by two 32, 64, or 128 floats
+    complex128, 
+    complex256	
+    bool	                    ?	            Boolean type storing True and False values
+    object	                    O	            Python object type; a value can be any Python object
+    string_	                    S	            Fixed-length ASCII string type (1 byte per character); 
+                                                  for example, to create a string dtype with length 10, 
+                                                  use 'S10'
+    unicode_ 	                U	            Fixed-length Unicode type (number of bytes platform 
+                                                  specific); same specification semantics as string_ 
+                                                  (e.g., 'U10')
+
+
+
+- Using NumPy Data Types
+
+    # Specify the data type explicity instead of inferring it
+    >>> arr1 = np.array([1, 2, 3], dtype=np.float64)
+
+    # Cast an array to another type
+    >>> int_array = np.array([1, 2, 3, 4, 5])
+    >>> float_array = int_array.astype(np.float64)
+
+    # Cast an array of strings to numbers
+    >>> numeric_strings = np.array(['1.25', '-9.6', '42'], dptype=np.string_)
+    >>> float_array = numeric_strings.astype(float)
