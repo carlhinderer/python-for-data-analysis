@@ -51,3 +51,49 @@ CHAPTER 03 - BUILT-IN DATA STRUCTURES
     # Create a new function using the first parameter.
     # The second parameter is then said to be 'curried'.
     >>> add_five = lambda y: add_numbers(5, y)
+
+
+    # Alternatively, we can use the 'functools' module to make this even easier.
+    >>> from functools import partial
+    >>> add_five = partial(add_numbers, 5)
+
+
+
+- The 'itertools' module
+
+    The 'itertools' module contains a collection of generators for common data algorithms.
+      For example, the 'groupby' function takes any sequence and a function, 
+      grouping consecutive elements in the sequence by return value of the function.
+
+
+    >>> import itertools
+
+    # Create a function to group by
+    >>> first_letter = lambda x: x[0]
+
+    # Create a sequence
+    >>> names = ['Alan', 'Adam', 'Wes', 'Will', 'Albert', 'Tom']
+
+    # Iterate over the results
+    >>> for letter, names in itertools.groupby(names, first_letter):
+            print(letter, list(names))
+
+    A ['Alan', 'Adam']
+    W ['Wes', 'Will']
+    A ['Albert']
+    T ['Tom']
+
+
+    Other useful itertools functions:
+
+    combinations(iterable, k)	Generates a sequence of all possible k-tuples of elements 
+                                  in the iterable, ignoring order and without replacement 
+                                  (see also the companion function combinations_with_replacement)
+
+    permutations(iterable, k)	Generates a sequence of all possible k-tuples of elements 
+                                  in the iterable, respecting order
+
+    groupby(iterable[, keyfunc])	Generates (key, sub-iterator) for each unique key
+
+    product(*iterables, repeat=1)	Generates the Cartesian product of the input iterables as 
+                                      tuples, similar to a nested for loop
