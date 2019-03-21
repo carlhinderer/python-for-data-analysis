@@ -38,6 +38,7 @@ CHAPTER 04 - NUMPY BASICS
     array([[-0.2047, 0.4789, -0.5194],
            [-0.5557, 1.9658, 1.3934]])
 
+
     # Now, I can write mathematical operations with data
     >>> data * 10
     array([[ -2.0471,   4.7894,  -5.1944],
@@ -46,3 +47,90 @@ CHAPTER 04 - NUMPY BASICS
     >>> data + data
     array([[-0.4094,  0.9579, -1.0389],
            [-1.1115,  3.9316,  2.7868]])
+
+
+    # ndarrays are homogenous, and they have a data type and a shape
+    >>> data.shape
+    (2, 3)
+
+    >>> data.dtype
+    dtype('float64')
+
+
+
+- Creating ndarrays
+
+    The easiest way to create an array is to use the 'array' function, which accepts
+      any sequence-like object and produces an ndarray.
+
+
+    # Pass in a list
+    >>> data1 = [6, 7.5, 0, 1]
+    >>> arr1 = np.array(data1)
+    >>> arr1
+    array([6., 7.5, 8., 0., 1.])
+
+
+    # Nested sequences are converted to multidimensional arrays
+    >>> data2 = [[1, 2, 3, 4], [5, 6, 7, 8]]
+    >>> arr2 = np.array(data2)
+    >>> arr2
+    array([[1, 2, 3, 4],
+           [5, 6, 7, 8]])
+
+    >>> arr2.ndim
+    2
+    >>> arr2.shape
+    (2, 4)
+    >>> arr2.dtype
+    dtype('int64')
+
+
+    # Create an array of all zeros
+    >>> np.zeros(10)
+    array([ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.])
+
+    # Multidimensional array of all zeros
+    >>> np.zeros((3, 6))
+    array([[ 0.,  0.,  0.,  0.,  0.,  0.],
+           [ 0.,  0.,  0.,  0.,  0.,  0.],
+           [ 0.,  0.,  0.,  0.,  0.,  0.]])
+
+
+    # Can also create an empty array, which may contain zeros or garbage values
+    >>> np.empty((2, 3, 2))
+    array([[[ 0.,  0.],
+            [ 0.,  0.],
+            [ 0.,  0.]],
+           [[ 0.,  0.],
+            [ 0.,  0.],
+            [ 0.,  0.]]])
+
+
+
+- Array Creation Functions
+
+    array	                   Convert input data (list, tuple, array, or other sequence 
+                               type) to an ndarray either by inferring a dtype or explicitly 
+                               specifying a dtype; copies the input data by default
+
+    asarray	                   Convert input to ndarray, but do not copy if the input is 
+                               already an ndarray
+
+    arange	                   Like the built-in range but returns an ndarray instead of a list
+
+    ones, ones_like	           Produce an array of all 1s with the given shape and dtype; 
+                               ones_like takes another array and produces a ones array of the 
+                               same shape and dtype
+
+    zeros, zeros_like	       Like ones and ones_like but producing arrays of 0s instead
+
+    empty, empty_like	       Create new arrays by allocating new memory, but do not populate 
+                               with any values like ones and zeros
+
+    full, full_like	           Produce an array of the given shape and dtype with all values 
+                               set to the indicated “fill value” full_like takes another array 
+                               and produces a filled array of the same shape and dtype
+
+    eye, identity	           Create a square N × N identity matrix (1s on the diagonal and 0s 
+                               elsewhere)
