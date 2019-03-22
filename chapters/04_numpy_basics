@@ -472,11 +472,111 @@ CHAPTER 04 - NUMPY BASICS
 
 - Universal Functions
 
+    A universal function, or 'ufunc', is a function that performs element-wise operations
+      on data in ndarrays.
+
+    >>> arr = np.arange(10)
+    >>> arr
+    array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    # Unary square root
+    >>> np.sqrt(arr)
+    array([ 0., 1., 1.4142, 1.7321, 2., 2.2361, 2.4495, 2.6458, 2.8284, 3. ])
+
+    # Unary exponential
+    >>> np.exp(arr)
+    array([ 1., 2.7183, 7.3891, 20.0855, 54.5982, 148.4132, 403.4288, 1096.6332, 2980.958, 8103.0839])
+
+
+    # Binary maximum
+    >>> x = np.random.randn(8)
+    >>> y = np.random.randn(8)
+
+    >>> x 
+    array([-0.0119,  1.0048,  1.3272, -0.9193, -1.5491,  0.0222,  0.7584, -0.6605])
+
+    >>> y 
+    array([ 0.8626, -0.01  ,  0.05  ,  0.6702,  0.853 , -0.9559, -0.0235, -2.3042])
+
+    >>> np.maximum(x, y)
+    array([ 0.8626,  1.0048,  1.3272,  0.6702,  0.853 ,  0.0222,  0.7584, -0.6605])
+
+
 
 - List of Unary Ufuncs
 
+    Function	           Description
+    --------------------------------------------------------------------------------------
+    abs, fabs	             Compute the absolute value element-wise for integer, 
+                               floating-point, or complex values
+
+    sqrt	                 Compute the square root of each element (equivalent to arr ** 0.5)
+
+    square	                 Compute the square of each element (equivalent to arr ** 2)
+
+    exp	                     Compute the exponent ex of each element
+
+    log, log10, log2, log1p	 Natural logarithm (base e), log base 10, log base 2, and 
+                               log(1 + x), respectively
+
+    sign	                 Compute the sign of each element: 1 (positive), 0 (zero), or –1 (negative)
+
+    ceil	                 Compute the ceiling of each element (i.e., the smallest integer 
+                               greater than or equal to that number)
+
+    floor	                 Compute the floor of each element (i.e., the largest integer less 
+                               than or equal to each element)
+
+    rint	                 Round elements to the nearest integer, preserving the dtype
+
+    modf	                 Return fractional and integral parts of array as a separate array
+
+    isnan	                 Return boolean array indicating whether each value is NaN (Not a Number)
+
+    isfinite, isinf	         Return boolean array indicating whether each element is finite 
+                               (non-inf, non-NaN) or infinite, respectively
+
+    cos, cosh, sin, sinh,    Regular and hyperbolic trigonometric functions
+    tan, tanh
+
+    arccos, arccosh,         Inverse trigonometric functions
+    arcsin, arcsinh, 
+    arctan, arctanh
+
+    logical_not	             Compute truth value of not x element-wise (equivalent to ~arr)
+
+
 
 - List of Binary Ufuncs
+
+    Function	         Description
+    ----------------------------------------------------------------------------------------
+    add	                    Add corresponding elements in arrays
+
+    subtract	            Subtract elements in second array from first array
+
+    multiply	            Multiply array elements
+
+    divide, floor_divide	Divide or floor divide (truncating the remainder)
+
+    power	                Raise elements in first array to powers indicated in second array
+
+    maximum, fmax	        Element-wise maximum; fmax ignores NaN
+
+    minimum, fmin	        Element-wise minimum; fmin ignores NaN
+
+    mod	                    Element-wise modulus (remainder of division)
+
+    copysign	            Copy sign of values in second argument to values in first argument
+
+    greater, greater_equal, Perform element-wise comparison, yielding boolean array (equivalent
+    less, less_equal,         to infix operators >, >=, <, <=, ==, !=)
+    equal, not_equal
+
+    logical_and,            Compute element-wise truth value of logical operation (equivalent  
+    logical_or,               to infix operators & |, ^)
+    logical_xor	
+
 
 
 - Array-Oriented Programming
