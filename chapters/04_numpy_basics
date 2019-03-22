@@ -645,11 +645,53 @@ CHAPTER 04 - NUMPY BASICS
 
 - Methods for Boolean Arrays
 
+    >>> bools = np.array([False, False, True, False])
+
+    >>> bools.any()
+    True
+
+    >>> bools.all()
+    False
+
 
 - Sorting
 
+    # NumPy arrays can be sorted in place
+    >>> arr = np.random.randn(6)
+    >>> arr
+    array([ 0.6095, -0.4938,  1.24  , -0.1357,  1.43  , -0.8469])
+
+    >>> arr.sort()
+    >>> arr
+    array([-0.8469, -0.4938, -0.1357,  0.6095,  1.24  ,  1.43  ])
+
+
 
 - Set Operations
+
+    >>> names = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+    >>> np.unique(names)
+    array(['Bob', 'Joe', 'Will'], dtype='<U4')
+
+
+    Here is a list of common array set operations:
+
+    Method	             Description
+    -------------------------------------------------------------------------------------------------------
+    unique(x)	         Compute the sorted, unique elements in x
+
+    intersect1d(x, y)	 Compute the sorted, common elements in x and y
+
+    union1d(x, y)	     Compute the sorted union of elements
+
+    in1d(x, y)	         Compute a boolean array indicating whether each element of x is 
+                           contained in y
+
+    setdiff1d(x, y)	     Set difference, elements in x that are not in y
+
+    setxor1d(x, y)	     Set symmetric differences; elements that are in either of the 
+                           arrays, but not both
+
 
 
 - File Input and Output with Arrays
