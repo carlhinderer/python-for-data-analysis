@@ -394,3 +394,119 @@ CHAPTER 04 - NUMPY BASICS
            [ 3.2489,  0.    ,  0.    ,  0.1241],
            [ 0.3026,  0.5238,  0.0009,  1.3438],
            [ 0.    ,  0.    ,  0.    ,  0.    ]])
+
+
+
+- Fancy Indexing
+
+    'Fancy indexing' is a term used by NumPy to describe indexing using integer arrays.
+
+    # Suppose we create the following array
+    >>> arr = np.empty((8, 4))
+    >>> for i in range(8): arr[i] = i
+    >>> arr
+    array([[ 0.,  0.,  0.,  0.],
+           [ 1.,  1.,  1.,  1.],
+           [ 2.,  2.,  2.,  2.],
+           [ 3.,  3.,  3.,  3.],
+           [ 4.,  4.,  4.,  4.],
+           [ 5.,  5.,  5.,  5.],
+           [ 6.,  6.,  6.,  6.],
+           [ 7.,  7.,  7.,  7.]])
+
+    # Now, to select a subset of rows in a particular order, you can just pass an array
+    #   of indexes in.  Note that fancy indexing always copies into a new array.
+    >>> arr[[4, 3, 0, 6]] 
+    array([[ 4.,  4.,  4.,  4.],
+           [ 3.,  3.,  3.,  3.],
+           [ 0.,  0.,  0.,  0.],
+           [ 6.,  6.,  6.,  6.]])
+
+
+
+- Transposing Arrays and Swapping Axes
+
+    # Transposing returns a view, it does not copy
+    >>> arr = np.arange(15).reshape((3, 5))
+    >>> arr
+    array([[ 0,  1,  2,  3,  4],
+           [ 5,  6,  7,  8,  9],
+           [10, 11, 12, 13, 14]])
+
+    >>> arr.T
+    array([[ 0,  5, 10],
+           [ 1,  6, 11],
+           [ 2,  7, 12],
+           [ 3,  8, 13],
+           [ 4,  9, 14]])
+
+
+    # For higher dimensional arrays, transpose will accept a tuple of axis 
+    #   numbers to permute the axes
+    >>> arr = np.arange(16).reshape((2, 2, 4))
+    >>> arr
+    array([[[ 0,  1,  2,  3],
+            [ 4,  5,  6,  7]],
+           [[ 8,  9, 10, 11],
+            [12, 13, 14, 15]]])
+
+    >>> arr.transpose((1, 0, 2))
+    array([[[ 0,  1,  2,  3],
+            [ 8,  9, 10, 11]],
+           [[ 4,  5,  6,  7],
+            [12, 13, 14, 15]]])
+
+
+    # The 'swapaxes' function can swap a given pair of axes in a multidimensional array
+    >>> arr.swapaxes(1, 2) 
+    array([[[ 0,  4],
+            [ 1,  5],
+            [ 2,  6],
+            [ 3,  7]],
+           [[ 8, 12],
+            [ 9, 13],
+            [10, 14],
+            [11, 15]]])
+
+
+
+- Universal Functions
+
+
+- List of Unary Ufuncs
+
+
+- List of Binary Ufuncs
+
+
+- Array-Oriented Programming
+
+
+- Mathematical and Statistical Methods
+
+
+- Methods for Boolean Arrays
+
+
+- Sorting
+
+
+- Set Operations
+
+
+- File Input and Output with Arrays
+
+
+- Linear Algebra
+
+
+- List of Commonly Used numpy.linalg Functions
+
+
+- Pseudorandom Number Generation
+
+
+- List of numpy.random Functions
+
+
+- Example - Random Walks
