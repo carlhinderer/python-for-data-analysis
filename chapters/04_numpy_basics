@@ -581,8 +581,66 @@ CHAPTER 04 - NUMPY BASICS
 
 - Array-Oriented Programming
 
+    There are lots of fast array-level operations that run in C speed.  For an example,
+      we can use 'where' to produce a new array based on the values of another array.
+
+    # Declare a 4x4 array of random normally distributed numbers
+    >>> arr = np.random.randn(4, 4)
+    >>> arr 
+    array([[-0.5031, -0.6223, -0.9212, -0.7262],
+           [ 0.2229,  0.0513, -1.1577,  0.8167],
+           [ 0.4336,  1.0107,  1.8249, -0.9975],
+           [ 0.8506, -0.1316,  0.9124,  0.1882]])
+
+    # Array based on condition
+    >>> arr > 0 
+    array([[False, False, False, False],
+           [ True,  True, False,  True],
+           [ True,  True,  True, False],
+           [ True, False,  True,  True]], dtype=bool)
+
+    # Create new array based on boolean array
+    >>> np.where(arr > 0, 2, -2) 
+    array([[-2, -2, -2, -2],
+           [ 2,  2, -2,  2],
+           [ 2,  2,  2, -2],
+           [ 2, -2,  2,  2]])
+
+
 
 - Mathematical and Statistical Methods
+
+    There is a set of mathematical functions that compute statistics about an entire array.
+
+    >>> arr = np.random.randn(5, 4)
+
+    >>> arr.mean()
+    0.19607051119998253
+
+    >>> arr.sum()
+    3.9214102239996507
+
+
+    Here is a list of basic array statistical methods:
+
+    Method	         Description
+    --------------------------------------------------------------------------------------------
+    sum	             Sum of all the elements in the array or along an axis; zero-length arrays 
+                       have sum 0
+
+    mean	         Arithmetic mean; zero-length arrays have NaN mean
+
+    std, var	     Standard deviation and variance, respectively, with optional degrees of 
+                       freedom adjustment (default denominator n)
+
+    min, max	     Minimum and maximum
+
+    argmin, argmax	 Indices of minimum and maximum elements, respectively
+
+    cumsum	         Cumulative sum of elements starting from 0
+
+    cumprod	         Cumulative product of elements starting from 1
+
 
 
 - Methods for Boolean Arrays
