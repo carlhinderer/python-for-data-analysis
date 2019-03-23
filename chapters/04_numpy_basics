@@ -838,3 +838,40 @@ CHAPTER 04 - NUMPY BASICS
     gamma	         Draw samples from a gamma distribution
 
     uniform	         Draw samples from a uniform [0, 1) distribution
+
+
+
+- Example - Random Walks
+
+    Here, we are doing a simulation of random walks.  Let's consider a simple random
+      walk starting at 0, with steps of 1 and -1 occurring with equal probability.
+
+    Here's how we would do the simulation in pure Python:
+
+    >>> import random
+    >>> position = 0
+    >>> walk = [position]
+    >>> steps = 1000
+
+    >>> for i in range(steps):
+            step = 1 if random.randint(0, 1) else -1
+            position += step
+            walk.append(position)
+
+    # Plot the first 100 values
+    >>> plt.plot(walk[:100])
+
+
+    Here's the faster and easier way with numpy:
+
+    >>> nsteps = 1000
+    >>> draws = np.random.randint(0, 2, size=nsteps)
+    >>> steps = np.where(draws > 0, 1, -1)
+    >>> walk = steps.cumsum()
+
+    # Now we can extract statistics like the minimum and maximum value along the walk
+    >>> walk.min()
+    -3
+
+    >>> walk.max()
+    31
