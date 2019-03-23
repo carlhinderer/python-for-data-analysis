@@ -696,11 +696,100 @@ CHAPTER 04 - NUMPY BASICS
 
 - File Input and Output with Arrays
 
+    NumPy can save and load data to and from disk, in either text or binary format.
+      Since most people prefer pandas for loading text or tabular data, we just look
+      at NumPy's binary format here.
+
+
+    # Create an array and save it in uncompressed raw binary format (.npy)
+    >>> arr = np.arange(10)
+    >>> np.save('some_file', arr)
+
+    # Load the saved array
+    >>> np.load('some_file.npy')
+    array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+
+    # Multiple arrays can be saved in an uncompressed archive
+    >>> np.savez('array_archive.npz', a=arr, b=arr)
+
+    # When you load an .npz file, you get back a dict-like object that loads the 
+    #   individual arrays lazily
+    >>> arch = np.load('array_archive.npz')
+    >>> arch['b']
+    array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+
+    # If you have data that compresses well, you can save it in a compressed format
+    >>> np.savez_compressed('arrays_compressed.npz', a=arr, b=arr)
+
+
 
 - Linear Algebra
 
+    # Create 2 arrays to multiply
+    >>> x = np.array([[1., 2., 3.], [4., 5., 6.]])
+    >>> y = y = np.array([[6., 23.], [-1, 7], [8, 9]])
+
+    # Get their dot product
+    >>> x.dot(y)
+    array([[  28.,   64.],
+           [  67.,  181.]])
+
+
+    # numpy.linalg has a standard set of matrix operations like inverse and determinant
+    >>> from numpy.linalg import inv, qr
+
+    # Create a 5x5 matrix of random numbers
+    >>> X = np.random.randn(5, 5)
+    >>> mat = X.T.dot(X)
+
+    # Get the inverse of the matrix
+    >>> inv(mat)
+    array([[  933.1189,   871.8258, -1417.6902, -1460.4005,  1782.1391],
+           [  871.8258,   815.3929, -1325.9965, -1365.9242,  1666.9347],
+           [-1417.6902, -1325.9965,  2158.4424,  2222.0191, -2711.6822],
+           [-1460.4005, -1365.9242,  2222.0191,  2289.0575, -2793.422 ],
+           [ 1782.1391,  1666.9347, -2711.6822, -2793.422 ,  3409.5128]])
+
+    # The dot product of a matrix and its inverse is the identity matrix
+    >>> mat.dot(inv(mat)) 
+    array([[ 1.,  0., -0., -0., -0.],
+           [-0.,  1.,  0.,  0.,  0.],
+           [ 0.,  0.,  1.,  0.,  0.],
+           [-0.,  0.,  0.,  1., -0.],
+           [-0.,  0.,  0.,  0.,  1.]])
+
+
 
 - List of Commonly Used numpy.linalg Functions
+
+    Function	    Description
+    ---------------------------------------------------------------------------------------
+    diag	        Return the diagonal (or off-diagonal) elements of a square matrix 
+                      as a 1D array, or convert a 1D array into a square matrix with 
+                      zeros on the off-diagonal
+
+    dot	            Matrix multiplication
+
+    trace	        Compute the sum of the diagonal elements
+
+    det	            Compute the matrix determinant
+
+    eig	            Compute the eigenvalues and eigenvectors of a square matrix
+
+    inv	            Compute the inverse of a square matrix
+
+    pinv	        Compute the Moore-Penrose pseudo-inverse of a matrix
+
+    qr	            Compute the QR decomposition
+
+    svd	            Compute the singular value decomposition (SVD)
+
+    solve	        Solve the linear system Ax = b for x, where A is a square matrix
+
+    lstsq	        Compute the least-squares solution to Ax = b
+
 
 
 - Pseudorandom Number Generation
