@@ -794,8 +794,47 @@ CHAPTER 04 - NUMPY BASICS
 
 - Pseudorandom Number Generation
 
+    The 'numpy.random' module supplements the built-in Python 'random' with functions
+      for efficiently generating whole arrays of sample values from many kinds of
+      probability distributions.  (Python's built-in 'random' module only samples 
+      values one at a time.)
+
+
+    # Create a 4x4 matrix of samples from the standard normal distribution.
+    >>> samples = np.random.normal(size=(4, 4))
+    >>> samples
+    array([[ 0.5732,  0.1933,  0.4429,  1.2796],
+           [ 0.575 ,  0.4339, -0.7658, -1.237 ],
+           [-0.5367,  1.8545, -0.92  , -0.1082],
+           [ 0.1525,  0.9435, -1.0953, -0.144 ]])
+
+
 
 - List of numpy.random Functions
 
+    Function         Description
+    ------------------------------------------------------------------------------------
+    seed	         Seed the random number generator
 
-- Example - Random Walks
+    permutation	     Return a random permutation of a sequence, or return a permuted range
+
+    shuffle	         Randomly permute a sequence in-place
+
+    rand	         Draw samples from a uniform distribution
+
+    randint	         Draw random integers from a given low-to-high range
+
+    randn	         Draw samples from a normal distribution with mean 0 and standard 
+                       deviation 1 (MATLAB-like interface)
+
+    binomial	     Draw samples from a binomial distribution
+
+    normal	         Draw samples from a normal (Gaussian) distribution
+
+    beta	         Draw samples from a beta distribution
+
+    chisquare	     Draw samples from a chi-square distribution
+
+    gamma	         Draw samples from a gamma distribution
+
+    uniform	         Draw samples from a uniform [0, 1) distribution
