@@ -1,0 +1,44 @@
+------------------------------------------------------
+CHAPTER 05 - PANDAS BASICS
+------------------------------------------------------
+
+- NumPy vs pandas
+
+    The biggest difference between NumPy and pandas is that pandas is designed for 
+      working with tabular or heterogenous data, while Numpy is designed to work with 
+      homogenous numerical array data.
+
+
+
+- pandas Data Structures
+
+    >>> import pandas as pd
+    >>> from pandas import Series, DataFrame
+
+
+    A 'Series' is a 1D array-like object containing a sequence of values and an 
+      associated array of data labels, called its 'index'.
+
+    # The simplest series is just an array
+    # The defualt index is integers 0 to N-1
+    >>> obj = pd.Series([4, 7, -5, 3])
+    >>> obj
+    0    4
+    1    7
+    2    -5
+    3    3
+
+    >>> obj.index
+    RangeIndex(start=0, stop=4, step=1)
+
+
+    # Create a custom label for each data point
+    >>> obj2 = pd.Series([4, 7, -5, 3], index=['d', 'b', 'a', 'c'])
+    >>> obj2
+    d    4
+    b    7
+    a    -5
+    c    3
+
+    >>> obj2.index
+    Out[17]: Index(['d', 'b', 'a', 'c'], dtype='object')
