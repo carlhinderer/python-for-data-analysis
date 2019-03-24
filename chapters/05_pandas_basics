@@ -88,6 +88,7 @@ CHAPTER 05 - PANDAS BASICS
 
 
     # A series can be created from a dict
+    # By default the index will put the dict's keys in sorted order
     >>> sdata = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}
     >>> obj3 = pd.Series(sdata)
     >>> obj3 
@@ -95,3 +96,56 @@ CHAPTER 05 - PANDAS BASICS
     Oregon    16000
     Texas     71000
     Utah       5000
+
+    # If you want the keys in a different order, you can specify it in an array
+    # Note that 'California' is set to NaN, since its not in the original data set
+    >>> states = ['California', 'Ohio', 'Oregon', 'Texas']
+    >>> obj4 = pd.Series(sdata, index=states)
+    >>> obj4
+    California        NaN
+    Ohio          35000.0
+    Oregon        16000.0
+    Texas         71000.0
+
+
+    # Both the series itself and its index have a name attribute
+    >>> obj4.name = 'population'
+    >>> obj4.index.name = 'state'
+    >>> obj4
+    state
+    California        NaN
+    Ohio          35000.0
+    Oregon        16000.0
+    Texas         71000.0
+    Name: population, dtype: float64
+
+
+    # Note that the index values can also be changed using in-place assignment
+    >>> obj4.index = ['Ohio', 'Michigan', 'Indiana', 'Illinois']
+
+
+
+- Checking for Missing Data in Series
+
+    # The 'isnull' method checks for missing data
+    >>> pd.isnull(obj4)
+    California     True
+    Ohio          False
+    Oregon        False
+    Texas         False
+    dtype: bool
+
+    # The instance method will return the same results
+    >>> obj4.isnull()
+
+
+    # The 'notnull' method checks for data that is present
+    >>> pd.notnull(obj4)
+    California    False
+    Ohio           True
+    Oregon         True
+    Texas          True
+    dtype: bool
+
+    # There is an instance method for 'notnull' also
+    >>> obj4.notnull()
