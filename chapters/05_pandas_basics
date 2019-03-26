@@ -273,3 +273,71 @@ CHAPTER 05 - PANDAS BASICS
     
     NumPy MaskedArray
     	Like the “2D ndarray” case except masked values become NA/missing in the DataFrame result
+
+
+
+- Index Objects
+
+    pandas's Index objects are responsible for holding the axis labels and other metadata.
+
+    >>> obj = pd.Series(range(3), index=['a', 'b', 'c'])
+    >>> obj.index
+    Index(['a', 'b', 'c'], dtype='object')
+
+    # Index objects are immutable
+    >>> obj.index[1] = 'd'
+    TypeError
+
+
+    # Basic array operations can be used on indexes
+    >>> frame3.columns
+    Index(['Nevada', 'Ohio'], dtype='object', name='state')
+
+    >>> 'Ohio' in frame3.columns
+    True
+
+    >>> 2003 in frame3.index
+    False
+
+
+
+- Reindexing
+
+    The 'reindex' method is an important operation on pandas objects.
+
+    # Create a Series
+    >>> obj = pd.Series([4.5, 7.2, -5.3, 3.6], index=['d', 'b', 'a', 'c'])
+    >>> obj 
+    d    4.5
+    b    7.2
+    a   -5.3
+    c    3.6
+    dtype: float64
+
+    # Reindexing the Series rearranges the data according to the new index
+    >>> obj2 = obj.reindex(['a', 'b', 'c', 'd', 'e'])
+    >>> obj2
+    a   -5.3
+    b    7.2
+    c    3.6
+    d    4.5
+    e    NaN
+    dtype: float64
+
+
+    # You can also fill in values automatically when reindexing
+    >>> obj3 = pd.Series(['blue', 'purple', 'yellow'], index=[0, 2, 4])
+    >>> obj3
+    0      blue
+    2    purple
+    4    yellow
+    dtype: object
+
+    >>> obj3.reindex(range(6), method='ffill') 
+    0      blue
+    1      blue
+    2    purple
+    3    purple
+    4    yellow
+    5    yellow
+    dtype: object
