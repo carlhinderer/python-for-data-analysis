@@ -205,3 +205,71 @@ CHAPTER 05 - PANDAS BASICS
 
     # The 'del' keyword will delete an entire column, as with a dict
     >>> del frame['debt']
+
+
+
+- Other Ways to Create DataFrames
+
+    # Using a nested dict of dicts is a common way to create a DataSet.  By default, pandas
+    #   will assume the outer dict is the columns and the inner dicts are the rows.
+    >>> pop = {'Nevada': {2001: 2.4, 2002: 2.9},
+               'Ohio': {2000: 1.5, 2001: 1.7, 2002: 3.6}}
+    >>> frame3 = pd.DataFrame(pop)
+    >>> frame3
+          Nevada  Ohio
+    2000     NaN   1.5
+    2001     2.4   1.7
+    2002     2.9   3.6
+
+
+    # To switch the rows and columns, just take the transpose
+    >>> frame3.T
+            2000  2001  2002
+    Nevada   NaN   2.4   2.9
+    Ohio     1.5   1.7   3.6
+
+
+    # The index and columns have 'name' attributes which will also be displayed
+    >>> frame3.index.name = 'Year'
+    >>> frame3.columns.name = 'State'
+
+
+    # The 'values' attributes returns the data contained in the DataFrame as a 2D ndarray
+    >>> frame3.values
+    array([[ nan,  1.5],
+           [ 2.4,  1.7],
+           [ 2.9,  3.6]])
+
+
+
+- List of Possible Data Inputs to the DataFrame Constructor
+
+    2D ndarray
+    	A matrix of data, passing optional row and column labels
+    
+    dict of arrays, lists, or tuples
+    	Each sequence becomes a column in the DataFrame; all sequences must be the same length
+    
+    NumPy structured/record array
+    	Treated as the “dict of arrays” case
+    
+    dict of Series
+    	Each value becomes a column; indexes from each Series are unioned together to form the 
+    	  result’s row index if no explicit index is passed
+    
+    dict of dicts
+    	Each inner dict becomes a column; keys are unioned to form the row index as in the 
+    	  “dict of Series” case
+    
+    List of dicts or Series
+    	Each item becomes a row in the DataFrame; union of dict keys or Series indexes become 
+    	    the DataFrame’s column labels
+    
+    List of lists or tuples
+    	Treated as the “2D ndarray” case
+    
+    Another DataFrame
+    	The DataFrame’s indexes are used unless different ones are passed
+    
+    NumPy MaskedArray
+    	Like the “2D ndarray” case except masked values become NA/missing in the DataFrame result
