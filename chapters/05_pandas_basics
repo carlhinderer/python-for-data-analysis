@@ -909,3 +909,48 @@ CHAPTER 05 - PANDAS BASICS
     # Sort on a given column or columns
     >>> frame.sort_values(by='b')
     >>> frame.sort_values(by=['a', 'b'])
+
+
+
+- Ranking
+
+    'Ranking' assigns ranks from 1-len(data) in an array.  By default, 'rank' breaks
+      ties by assigning each tied group the mean rank.
+
+    # Rank a series
+    >>> obj pd.Series([7, -5, 7, 4, 2, 0, 4])
+    >>> obj.rank()
+
+    0    6.5
+    1    1.0
+    2    6.5
+    3    4.5
+    4    3.0
+    5    2.0
+    6    4.5
+    dtype: float64
+
+
+    # DataFrames can compute rank over rows or columns.
+    >>> frame = pd.DataFrame({'b': [4.3, 7, -3, 2], 'a': [0, 1, 0, 1],
+                              'c': [-2, 5, 8, -2.5]})
+
+    # Rank columns
+    >>> frame.rank(axis='columns')
+         a    b    c
+    0  2.0  3.0  1.0
+    1  1.0  3.0  2.0
+    2  2.0  1.0  3.0
+    3  2.0  3.0  1.0
+
+
+    This is a list of tie-breaking methods that can be used to rank:
+
+    Method      Description
+    ---------------------------------------------------------------------------------
+    'average'   Default: assign the average rank to each entry in the equal group
+    'min'       Use the minimum rank for the whole group
+    'max'       Use the maximum rank for the whole group
+    'first'     Assign ranks in the order the values appear in the data
+    'dense'     Like method='min', but ranks always increase by 1 in between groups 
+                  rather than the number of equal elements in a group
