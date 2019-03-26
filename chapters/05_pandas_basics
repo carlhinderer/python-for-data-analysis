@@ -149,3 +149,59 @@ CHAPTER 05 - PANDAS BASICS
 
     # There is an instance method for 'notnull' also
     >>> obj4.notnull()
+
+
+
+- pandas DataFrames
+
+    A DataFrame represents a rectangular table of data and contains an ordered
+      colleciton of columns, each of which can be a different data type.
+
+
+    # One of the most common ways to construct a DataSet is from a dict of
+    #   equal length lists or NumPy arrays
+    >>> data = {'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada', 'Nevada'],
+                'year': [2000, 2001, 2002, 2001, 2002, 2003],
+                'pop': [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]}
+
+    >>> frame = pd.DataFrame(data)
+
+
+    # For large data frames, the 'head' method will select only the first 5 rows
+    >>> frame.head()
+
+    # If you specify a sequence of columns, the DataFrame's columns will be arranged
+    #   in that order.  If you pass in a column that isn't contained in the dict, it will 
+    #   appear with missing values in the result.
+    >>> pd.DataFrame(data, columns=['year', 'state', 'pop'])
+
+
+
+- Column and Row Access in DataFrames
+    
+    # Columns in the DataFrame can be retrieved as a Series by attribute
+    >>> frame['state']
+    >>> frame.state
+    one        Ohio
+    two        Ohio
+    three      Ohio
+    four     Nevada
+    five     Nevada
+    six      Nevada
+    Name: state, dtype: object
+
+    # Rows can be retrieved either by position or with the 'loc' attribute
+    >>> frame.loc['three']
+    year     2002
+    state    Ohio
+    pop       3.6
+    debt      NaN
+    Name: three, dtype: object
+
+
+    # Assign an entire column with a value, assigning a column that doesn't exist
+    #   will create a new column
+    >>> frame['debt'] = 16.5
+
+    # The 'del' keyword will delete an entire column, as with a dict
+    >>> del frame['debt']
