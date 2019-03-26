@@ -653,3 +653,45 @@ CHAPTER 05 - PANDAS BASICS
     reindex method              Select either rows or columns by labels
 
     get_value, set_value        Select single value by row and column label
+
+
+
+- Integer Indexes
+
+    Note that there can be ambiguity if you have integer labels on a column that contains
+      integers.  For this reason, there is a rule that if you have an axis index containing
+      integers, data selection is always label-oriented.
+
+    To make things a bit more explicit, using the 'loc' and 'iloc' methods in these cases
+      is a best practice.
+
+    # Create a series of integers
+    >>> ser = pd.Series(np.arange(3.))
+    >>> ser
+
+    0    0.0
+    1    1.0
+    2    2.0
+    dtype: float64
+
+
+    # Integer index selects the first row by label
+    >>> ser[:1]
+
+    0    0.0
+    dtype: float64
+
+
+    # Select by label index
+    >>> ser.loc[:1]
+
+    0    0.0
+    1    1.0
+    dtype: float64
+
+
+    # Select by integer index
+    >>> ser.iloc[:1]
+ 
+    0    0.0
+    dtype: float64
