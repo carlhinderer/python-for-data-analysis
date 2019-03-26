@@ -566,3 +566,90 @@ CHAPTER 05 - PANDAS BASICS
     Colorado    0    5      6     7
     Utah        8    9     10    11
     New York   12   13     14    15
+
+
+
+- Selection with 'loc' and 'iloc'
+
+    The 'loc' and 'iloc' methods are special indexing operators which enable you to 
+      select a subset of rows and columns using either axis labels (loc) or integers (iloc).
+
+    # Select a single row and multiple columns by label
+    >>> data.loc['Colorado', ['two', 'three']]
+
+    two      5
+    three    6
+    Name: Colorado, dtype: int64    
+
+
+    # Select a single row by integer
+    >>> data.iloc[2]
+
+    one       8
+    two       9
+    three    10
+    four     11
+    Name: Utah, dtype: int64
+
+    # Select a single row with columns
+    >>> data.iloc[2, [3, 0, 1] 
+
+    four    11
+    one      8
+    two      9
+    Name: Utah, dtype: int64
+
+    # Multiple rows with multiple columns
+    >>> data.iloc[[1, 2], [3, 0, 1]]
+
+              four  one  two
+    Colorado     7    0    5
+    Utah        11    8    9
+
+    # Indexing and slicing operations work also
+    >>> data.loc[:'Utah', 'two']
+
+    Ohio        0
+    Colorado    5
+    Utah        9
+    Name: two, dtype: int64
+
+    # Can also select using boolean conditions
+    >>> data.iloc[:, :3][data.three > 5]
+ 
+              one  two  three
+    Colorado    0    5      6
+    Utah        8    9     10
+    New York   12   13     14
+
+
+
+- List of DataFrame Indexing Operations
+
+    Type                     Notes
+    -------------------------------------------------------------------------------------------
+    df[val]                     Select single column or sequence of columns from the DataFrame; 
+                                  special case conveniences: boolean array (filter rows), slice 
+                                  (slice rows), or boolean DataFrame (set values based on some 
+                                  criterion)
+
+    df.loc[val]                 Selects single row or subset of rows from the DataFrame by label
+
+    df.loc[:, val]              Selects single column or subset of columns by label
+
+    df.loc[val1, val2]          Select both rows and columns by label
+
+    df.iloc[where]              Selects single row or subset of rows from the DataFrame by integer 
+                                  position
+
+    df.iloc[:, where]           Selects single column or subset of columns by integer position
+
+    df.iloc[where_i, where_j]   Select both rows and columns by integer position
+
+    df.at[label_i, label_j]     Select a single scalar value by row and column label
+
+    df.iat[i, j]                Select a single scalar value by row and column position (integers)
+
+    reindex method              Select either rows or columns by labels
+
+    get_value, set_value        Select single value by row and column label
