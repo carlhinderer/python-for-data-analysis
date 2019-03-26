@@ -835,3 +835,77 @@ CHAPTER 05 - PANDAS BASICS
     Ohio    3.0  3.0  3.0
     Texas   6.0  6.0  6.0
     Oregon  9.0  9.0  9.0
+
+
+
+- Function Application and Mapping
+
+    # NumPy ufuncs also work with pandas objects
+    >>> np.abs(frame)
+
+
+    # 1D array functions can also be applied to each row of a DataFrame
+    >>> f = lambda x: x.max() - x.min()
+    >>> frame.apply(f)
+
+    # 1D array functions can also be applied to columns
+    >>> frame.apply(f, axis='columns')
+
+
+    # Element-wise Python functions can be used too
+    >>> format = lambda x: '%.2f' % x
+    >>> frame.apply(format)
+
+
+
+- Sorting
+
+    # To sort lexicographically by row or column index, use the 'sort_index' method.
+    #   This returns a new, sorted object.
+    >>> obj = pd.Series(range(4), index=['d', 'a', 'b', 'c'])
+
+    # Sort labels
+    >>> obj.sort_index()
+
+    a    1
+    b    2
+    c    3
+    d    0
+    dtype: int64
+
+    # Sort values
+    >>> obj.sort_values()
+
+    d    0
+    a    1
+    b    2
+    c    3
+    dtype: int64
+
+
+    # A DataFrame can be sorted on either axis
+    >>> frame = pd.DataFrame(np.arange(8).reshape((2, 4)),
+                             index=['three', 'one'],
+                             columns=['d', 'a', 'b', 'c'])
+
+    # Sort rows
+    >>> frame.sort_index()
+
+           d  a  b  c
+    one    4  5  6  7
+    three  0  1  2  3
+
+    # Sort columns
+    >>> frame.sort_index(axis=1)
+
+           a  b  c  d
+    three  1  2  3  0
+    one    5  6  7  4
+
+
+    # Sort descending instead of ascending
+    >>> frame.sort_index(axis=1, ascending=False)
+
+    # Sort on a given column or columns
+    >>> frame.sort_values(by='b')
+    >>> frame.sort_values(by=['a', 'b'])
