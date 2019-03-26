@@ -301,7 +301,7 @@ CHAPTER 05 - PANDAS BASICS
 
 
 
-- Reindexing
+- Reindexing Series
 
     The 'reindex' method is an important operation on pandas objects.
 
@@ -341,3 +341,51 @@ CHAPTER 05 - PANDAS BASICS
     4    yellow
     5    yellow
     dtype: object
+
+
+
+- Reindexing DataFrames
+
+    With DataFrames, 'reindex' can alter the row index, the column index, or both.
+
+    # Create a DataFrame
+    >>> frame = pd.DataFrame(np.arange(9).reshape((3, 3)),
+                             index=['a', 'c', 'd'],
+                             columns=['Ohio', 'Texas', 'California'])
+    >>> frame 
+
+       Ohio  Texas  California
+    a     0      1           2
+    c     3      4           5
+    d     6      7           8
+
+
+    # By default, the 'reindex' method will reindex the rows
+    >>> frame2 = frame.reindex(['a', 'b', 'c', 'd'])
+    >>> frame2
+
+       Ohio  Texas  California
+    a   0.0    1.0         2.0
+    b   NaN    NaN         NaN
+    c   3.0    4.0         5.0
+    d   6.0    7.0         8.0
+
+
+    # The columns can be reindexed
+    >>> states = ['Texas', 'Utah', 'California']
+    >>> frame.reindex(columns=states)
+
+       Texas  Utah  California
+    a      1   NaN           2
+    c      4   NaN           5
+    d      7   NaN           8
+
+
+    # Reindexing can be done more succinctly by label-indexing with 'loc'
+    >>> frame.loc[['a', 'b', 'c', 'd'], states]
+
+       Texas  Utah  California
+    a    1.0   NaN         2.0
+    b    NaN   NaN         NaN
+    c    4.0   NaN         5.0
+    d    7.0   NaN         8.0
