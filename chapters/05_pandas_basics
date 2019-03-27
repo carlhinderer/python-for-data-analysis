@@ -1148,3 +1148,32 @@ CHAPTER 05 - PANDAS BASICS
     MSFT   -0.089205
     GOOG   -0.017405
     dtype: float64
+
+
+
+- Unique Values, Vaule Counts, and Membership
+
+    # Get unique values in a series
+    >>> s = pd.Series(['c', 'a', 'd', 'a', 'a', 'b', 'b', 'c', 'c'])
+    >>> s.unique()
+    array(['c', 'a', 'd', 'b'], dtype=object)
+
+
+    # Get value counts for a series
+    >>> pd.value_counts(s.values, sort=False)
+
+    b    2
+    a    3
+    c    3
+    d    1
+    dtype: int64
+
+
+    # The 'isin' method performs a vectorized set membership check
+    >>> s[s.isin(['b', 'c'])]
+    0    c
+    5    b
+    6    b
+    7    c
+    8    c
+    dtype: object
