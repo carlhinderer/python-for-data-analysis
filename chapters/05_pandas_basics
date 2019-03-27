@@ -1067,3 +1067,84 @@ CHAPTER 05 - PANDAS BASICS
     cumprod            Cumulative product of values
     diff               Compute first arithmetic difference (useful for time series)
     pct_change         Compute percent changes
+
+
+
+- Correlation and Covariance
+
+    Some summary statistics, like correlation and covariance, are computed from pairs of
+      arguments.  Here, we'll use some DataFrames of stock prices and volumes obtained
+      from Yahoo Finance using the 'pandas-datareader' package.
+
+    # Get the closing prices and trading volumes for a few stocks
+    >>> import pandas_datareader.data as web
+
+    >>> all_data = {ticker: web.get_data_yahoo(ticker)
+                    for ticker in ['AAPL', 'IBM', 'MSFT', 'GOOG']}
+
+    >>> price = pd.DataFrame({ticker: data['Adj Close']
+                              for ticker, data in all_data.items()})
+
+    >>> volume = pd.DataFrame({ticker: data['Volume']
+                               for ticker, data in all_data.items()})
+
+
+    # Compute percent changes of the prices
+    >>> returns = price.pct_change()
+    >>> returns.tail()
+
+                    AAPL       IBM      MSFT      GOOG
+    Date                                              
+    2019-03-21  0.036830  0.013180  0.022975  0.006185
+    2019-03-22 -0.020708 -0.014070 -0.026368 -0.021144
+    2019-03-25 -0.012091 -0.001936  0.005211 -0.010369
+    2019-03-26 -0.010332  0.007472  0.002125 -0.007024
+    2019-03-27  0.008994 -0.007132 -0.009668 -0.009792
+
+
+    # Get the correlation between 2 series
+    >>> returns['MSFT'].corr(returns['IBM'])
+    0.4880920568696444
+
+    # Get the covariance between 2 series
+    >>> returns['MSFT'].cov(returns['IBM'])
+    8.728436162356121e-05
+
+
+    # The DataFrame's 'corr' and 'cov' methods return a full correlation or
+    #   covariance matrix as a DataFrame
+    >>> returns.corr()
+
+              AAPL       IBM      MSFT      GOOG
+    AAPL  1.000000  0.373384  0.451829  0.458214
+    IBM   0.373384  1.000000  0.488092  0.408728
+    MSFT  0.451829  0.488092  1.000000  0.537522
+    GOOG  0.458214  0.408728  0.537522  1.000000
+
+    >>> returns.cov()
+
+              AAPL       IBM      MSFT      GOOG
+    AAPL  0.000270  0.000076  0.000108  0.000116
+    IBM   0.000076  0.000152  0.000087  0.000078
+    MSFT  0.000108  0.000087  0.000210  0.000120
+    GOOG  0.000116  0.000078  0.000120  0.000238
+
+
+    # The DataFrame's 'corrwith' method lets you compute pairwise correlations between
+    #   a DataFrame's columns or rows with another Series or DataFrame.
+    #   (Note: 'returns.IBM' is legal, since 'IBM' is a valid Python identifier.)
+    >>> returns.corrwith(returns.IBM)
+
+    AAPL    0.373384
+    IBM     1.000000
+    MSFT    0.488092
+    GOOG    0.408728
+    dtype: float64
+
+    # Correlate the percent changes with volume
+    >>> returns.corrwith(volume)
+    AAPL   -0.060785
+    IBM    -0.152824
+    MSFT   -0.089205
+    GOOG   -0.017405
+    dtype: float64
