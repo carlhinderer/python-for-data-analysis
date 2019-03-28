@@ -300,8 +300,68 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
 - Working With Delimited Formats
 
+    Sometimes, a file will contain malformed lines that trip up the pandas data reader.
+      In these cases, it's often easier to iterate through the file by hand using
+      Python's built-in 'csv' module.
 
-- CSV Dialect Options
+    # Simple example
+    >>> import csv
+    >>> f = open('examples/ex7.csv')
+    >>> reader = csv.reader(f)
+
+    >>> for line in reader:
+            print(line)
+
+    ['a', 'b', 'c']
+    ['1', '2', '3']
+    ['1', '2', '3']
+
+
+    # An example where more wrangling is required
+    >>> with open('examples/ex7.csv') as f:
+            lines = list(csv.reader(f))
+
+    >>> header, values = lines[0], lines[1:]
+    >>> data_dict = {h: v for h, v in zip(header, zip(*values))}
+
+
+    # To define a custom csv parsing format with a different delimeter, string-quoting
+    #   convention, and line terminator, we can define a subclass of 'csv.Dialect'.
+    >>> class MyDialect(csv.Dialect):
+            lineterminator = '\n'
+            delimiter = ';'
+            quotechar = '"'
+            quoting = csv.QUOTE_MINIMAL
+
+    >>> reader = csv.reader(f, dialect=MyDialect)
+
+
+
+- List of CSV Dialect Options
+
+    Argument	        Description
+    ------------------------------------------------------------------------------------
+    delimiter	        One-character string to separate fields; defaults to ','.
+
+    lineterminator	    Line terminator for writing; defaults to '\r\n'. Reader ignores this 
+                          and recognizes cross-platform line terminators.
+
+    quotechar	        Quote character for fields with special characters (like a delimiter); 
+                          default is '"'.
+
+    quoting	            Quoting convention. Options include csv.QUOTE_ALL (quote all fields),
+                          csv.QUOTE_MINIMAL (only fields with special characters like the delimiter),
+                          csv.QUOTE_NONNUMERIC, and csv.QUOTE_NONE (no quoting). See Python’s 
+                          documentation for full details. Defaults to QUOTE_MINIMAL.
+
+    skipinitialspace	Ignore whitespace after each delimiter; default is False.
+
+    doublequote	        How to handle quoting character inside a field; if True, it is doubled 
+                          (see online documentation for full detail and behavior).
+
+    escapechar	        String to escape the delimiter if quoting is set to csv.QUOTE_NONE; 
+                          disabled by default.
+
 
 
 - JSON Data
