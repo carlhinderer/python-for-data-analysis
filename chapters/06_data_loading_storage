@@ -1,0 +1,65 @@
+------------------------------------------------------
+CHAPTER 06 - DATA LOADING AND STORAGE
+------------------------------------------------------
+
+- Parsing Functions in pandas
+
+    Function	     Description
+    --------------------------------------------------------------------------------------
+    read_csv	     Load delimited data from a file, URL, or file-like object; use comma 
+                       as default delimiter
+
+    read_table	     Load delimited data from a file, URL, or file-like object; use tab ('\t') 
+                       as default delimiter
+
+    read_fwf	     Read data in fixed-width column format (i.e., no delimiters)
+
+    read_clipboard	 Version of read_table that reads data from the clipboard; useful for 
+                       converting tables from web pages
+
+    read_excel	     Read tabular data from an Excel XLS or XLSX file
+
+    read_hdf	     Read HDF5 files written by pandas
+
+    read_html	     Read all tables found in the given HTML document
+
+    read_json	     Read data from a JSON (JavaScript Object Notation) string representation
+
+    read_msgpack	 Read pandas data encoded using the MessagePack binary format
+
+    read_pickle	     Read an arbitrary object stored in Python pickle format
+
+    read_sas	     Read a SAS dataset stored in one of the SAS system’s custom storage formats
+
+    read_sql	     Read the results of a SQL query (using SQLAlchemy) as a pandas DataFrame
+
+    read_stata	     Read a dataset from Stata file format
+
+    read_feather	 Read the Feather binary file format
+
+
+
+- Reading from CSV
+
+    # Here we have a sample csv
+    >>> !cat examples/ex1.csv
+
+    a,b,c,d,message
+    1,2,3,4,hello
+    5,6,7,8,world
+    9,10,11,12,foo
+
+
+    # Here we read the csv into a DataFrame
+    >>> df = pd.read_csv('examples/ex1.csv')
+    >>> df
+
+       a   b   c   d message
+    0  1   2   3   4   hello
+    1  5   6   7   8   world
+    2  9  10  11  12     foo
+
+
+    # Or, we can use 'read_table' and specify the delimiter, which will give
+    #   us the same DataFrame
+    >>> pd.read_table('examples/ex1.csv', sep=',')
