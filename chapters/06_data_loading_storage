@@ -63,3 +63,115 @@ CHAPTER 06 - DATA LOADING AND STORAGE
     # Or, we can use 'read_table' and specify the delimiter, which will give
     #   us the same DataFrame
     >>> pd.read_table('examples/ex1.csv', sep=',')
+
+
+    # Sometimes files don't have a header row
+    >>> !cat examples/ex2.csv
+
+    1,2,3,4,hello
+    5,6,7,8,world
+    9,10,11,12,foo
+
+    # In this case, you can either let pandas assign default column names
+    >>> pd.read_csv('examples/ex2.csv', header=None)
+
+       0   1   2   3      4
+    0  1   2   3   4  hello
+    1  5   6   7   8  world
+    2  9  10  11  12    foo
+
+    # Or you can specify the column names yourself
+    >>> pd.read_csv('examples/ex2.csv', names=['a', 'b', 'c', 'd', 'message'])
+
+
+
+- Specifying Index and Columns
+
+    # You can specify that one of the columns should be the index
+    >>> names = ['a', 'b', 'c', 'd', 'e']
+    >>> pd.read_csv('examples/ex2.csv', names=names, index_col='message')
+
+             a   b   c   d
+    message               
+    hello    1   2   3   4
+    world    5   6   7   8
+    foo      9  10  11  12
+
+
+    # A list of column names can be passed to form a hierarchical index of multiple columns
+    >>> !cat examples/csv_mindex.csv
+
+    key1,key2,value1,value2
+    one,a,1,2
+    one,b,3,4
+    one,c,5,6
+    one,d,7,8
+    two,a,9,10
+    two,b,11,12
+    two,c,13,14
+    two,d,15,16
+
+    >>> parsed = pd.read_csv('examples/csv_mindex.csv', index_col=['key1', 'key2'])
+    >>> parsed
+    
+                   value1  value2
+    key1 key2                
+    one  a          1       2
+         b          3       4
+         c          5       6
+         d          7       8
+    two  a          9      10
+         b         11      12
+         c         13      14
+         d         15      16
+
+
+
+- Parsing Input
+
+    # In some cases, a table may not have a fixed delimiter, for instance using a 
+    #   variable amount of whitespace to separate fields.  Regex's can be used
+    #   in this case.
+    >>> result = pd.read_table('examples/ex3.txt', sep='\s+')
+
+
+- Handling Missing Values
+
+
+- List of 'read_csv' and 'read_table' Arguments
+
+
+- Reading Text Files in Pieces
+
+
+- Writing Data to Text Format
+
+
+- Working With Delimited Formats
+
+
+- CSV Dialect Options
+
+
+- JSON Data
+
+
+- XML and HTML Scraping
+
+
+- Parsing XML With LXML.Objectify
+
+
+- Binary Data Formats
+
+
+- HDF5
+
+
+- Reading Excel Files
+
+
+- Interacting With Web APIs
+
+
+- Interacting With Databases
