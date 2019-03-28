@@ -336,6 +336,15 @@ CHAPTER 06 - DATA LOADING AND STORAGE
     >>> reader = csv.reader(f, dialect=MyDialect)
 
 
+    # The 'csv.writer' can be used to write files, and can also use a dialect
+    >>> with open('mydata.csv', 'w') as f:
+            writer = csv.writer(f, dialect=my_dialect)
+            writer.writerow(('one', 'two', 'three'))
+            writer.writerow(('1', '2', '3'))
+            writer.writerow(('4', '5', '6'))
+            writer.writerow(('7', '8', '9'))
+
+
 
 - List of CSV Dialect Options
 
@@ -365,6 +374,55 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
 
 - JSON Data
+
+    # Create a JSON string
+    >>> """
+    {"name": "Wes",
+     "places_lived": ["United States", "Spain", "Germany"],
+     "pet": null,
+     "siblings": [{"name": "Scott", "age": 30, "pets": ["Zeus", "Zuko"]},
+                  {"name": "Katie", "age": 38,
+                   "pets": ["Sixes", "Stache", "Cisco"]}]
+    }
+    """
+
+    # Load the JSON string into Python
+    >>> import json
+    >>> result = json.loads(obj)
+    >>> result
+    {'name': 'Wes',
+     'pet': None,
+     'places_lived': ['United States', 'Spain', 'Germany'],
+     'siblings': [{'age': 30, 'name': 'Scott', 'pets': ['Zeus', 'Zuko']},
+                  {'age': 38, 'name': 'Katie', 'pets': ['Sixes', 'Stache', 'Cisco']}]}
+
+    # 'json.dumps' converts a Python string back to JSON
+    >>> asjson = json.dumps(result)
+
+
+    # Series and DataFrame objects can automatically read JSON
+    >>> !cat examples/example.json
+
+    [{"a": 1, "b": 2, "c": 3},
+     {"a": 4, "b": 5, "c": 6},
+     {"a": 7, "b": 8, "c": 9}]
+
+    >>> data = pd.read_json('examples/example.json')
+    >>> data
+
+       a  b  c
+    0  1  2  3
+    1  4  5  6
+    2  7  8  9
+
+
+    # Series and DataFrame can export to JSON also
+    >>> print(data.to_json())
+    {"a":{"0":1,"1":4,"2":7},"b":{"0":2,"1":5,"2":8},"c":{"0":3,"1":6,"2":9}}
+
+    >>> print(data.to_json(orient='records'))
+    [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
+
 
 
 - XML and HTML Scraping
