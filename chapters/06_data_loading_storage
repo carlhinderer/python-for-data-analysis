@@ -238,8 +238,64 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
 - Reading Text Files in Pieces
 
+    When processing very large files, you may want to only read a small part of the file,
+      or to iterate through chunks of the file.
+
+    # We can change the pandas display setting when looking at large files
+    >>> pd.options.display.max_rows = 10
+
+    # If we want to read only a small number of rows from the file, we can use 'nrows'
+    >>> pd.read_csv('examples/ex6.csv', nrows=5)
+
+
+    # To read a file in pieces, specify a 'chunksize' as a number of rows
+    >>> chunker = pd.read_csv('examples/ex6.csv', chunksize=1000)
+
+    >>> tot = pd.Series([])
+    >>> for piece in chunker:
+            tot = tot.add(piece[key].value_counts(), fill_value=0)
+    >>> tot = tot.sort_values(ascending=False)
+
+
 
 - Writing Data to Text Format
+
+    # Read a csv file
+    >>> data = pd.read_csv('examples/ex5.csv')
+    >>> data
+
+    # Write the DataFrame to a csv
+    >>> data.to_csv('examples/out.csv')
+
+
+    # Different outputs and separators can be used
+    >>> data.to_csv(sys.stdout, sep='|')
+
+    # The value that can be inserted for missing values is set with 'na_rep'
+    >>> data.to_csv(sys.stdout, na_rep='NULL')
+
+    # Both row and column labels are written by default, but both can be disabled
+    >>> data.to_csv(sys.stdout, index=False, header=False)
+
+    # Just a subset of columns can be written
+    >>> data.to_csv(sys.stdout, index=False, columns=['a', 'b', 'c')
+
+
+    # A Series object can also be written to csv
+    >>> dates = pd.date_range('1/1/2000', periods=7)
+    >>> ts = pd.Series(np.arange(7), index=dates)
+    >>> ts.to_csv('examples/tseries.csv')
+
+    >>> !cat examples/tseries.csv
+
+    2000-01-01,0
+    2000-01-02,1
+    2000-01-03,2
+    2000-01-04,3
+    2000-01-05,4
+    2000-01-06,5
+    2000-01-07,6
+
 
 
 - Working With Delimited Formats
