@@ -517,14 +517,22 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
 - Binary Data Formats
 
+    pandas objects have a 'to_pickle' method that can be used to serialize objects to disk.
+      Note that pickle is recommended only as a short-term storage format.  This is because
+      it's not really possible to guarantee that pickle will be stable over time.
 
-- HDF5
+    # Pickle an object
+    >>> frame = pd.read_csv('examples/ex1.csv')
+    >>> frame.to_pickle('examples/frame_pickle')
+
+    # Unpickle an object
+    >>> frame = pd.read_pickle('examples/frame_pickle')
 
 
-- Reading Excel Files
+    Other binary formats that can be used to store pandas objects:
 
+      1. bcolz   = compressable column-oriented binary format based on the Blosc compression
+                     library
 
-- Interacting With Web APIs
-
-
-- Interacting With Databases
+      2. Feather = cross-language column-oriented file format, uses Apache Arrow columnar
+                     memory format
