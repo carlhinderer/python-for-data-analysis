@@ -536,3 +536,57 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
       2. Feather = cross-language column-oriented file format, uses Apache Arrow columnar
                      memory format
+
+
+
+- HDF5
+
+    HDF5 ('Hierarchical Data Format') is a well-regarded file format intended for storing 
+      large quantities of scientific array data.  It is available as a C library, and has 
+      interfaces for many other languages.  
+
+    Each HDF5 file can store multiple datasets and supporting metadata.  It supports
+      on-the-fly compression with a variety of compression modes.  It is a good choice for
+      working with very large datasets that don't fit into memory, since you can read
+      and write small sections of much larger arrays.  Since many data science problems
+      are IO-bound (not CPU-bound), using something like HDF5 can massively accelerate
+      your applications.  
+
+    Note that HDF5 is not a database.  It is best suited for write-once, read-many
+      datasets.  Concurrent writes can corrupt a file.
+
+    Python has the 'PyTables' and 'h5py' libraries for working with HDF5 files directly,
+      and pandas provides a high-level interface that simplifies storing pandas objects.
+
+
+    # The HDFStore class works like a dict
+    >>> frame = pd.DataFrame({'a': np.random.randn(100)})
+    >>> store = pd.HDFStore('mydata.h5')
+
+    # Add the entire DataFrame or just a column to the store
+    >>> store['obj1'] = frame
+    >>> store['obj1_col'] = frame['a']
+
+    # To retrive an object from the store
+    >>> frame = store['obj1']
+
+
+    # The HDFStore supports 2 storage schemas, 'fixed' and 'table'
+    #   'table' is slower, but it supports query operations
+    >>> store.put('obj2', frame, format='table')
+    >>> store.select('obj2', where=['index >= 10 and index <= 15'])
+
+               a
+    10  1.007189
+    11 -1.296221
+    12  0.274992
+    13  0.228913
+    14  1.352917
+    15  0.886429
+
+    >>> store.close()
+
+
+    # The pandas 'read_hdf' and 'to_hdr' functions give you shortcuts to these tools
+    >>> frame.to_hdf('mydata.h5', 'obj3', format='table')
+    >>> pd.read_hdf('mydata.h5', 'obj3', where=['index < 5'])
