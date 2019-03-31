@@ -427,8 +427,92 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
 - XML and HTML Scraping
 
+    Python has many libraries for reading and writing data in XML and HTML.  Popular
+      ones include 'lxml' (fast) and 'Beautiful Soup' and 'html5lib' (better at
+      handling malformed data).  
+
+    pandas does have a 'read_html' function, which uses either lxml or Beautiful Soup
+      under the hood.
+
+
+    # By default, 'read_html' searches for and tries to parse anything inside of 
+    #   <table> tags
+    >>> tables = pd.read_html('examples/fdic_failed_bank_list.html')
+    >>> len(tables)
+    1
+
+    >>> failures = tables[0]
+    >>> failures.head()
+
+                          Bank Name             City  ST   CERT  \
+    0                   Allied Bank         Mulberry  AR     91   
+    1  The Woodbury Banking Company         Woodbury  GA  11297   
+    2        First CornerStone Bank  King of Prussia  PA  35312   
+    3            Trust Company Bank          Memphis  TN   9956   
+    4    North Milwaukee State Bank        Milwaukee  WI  20364   
+                     Acquiring Institution        Closing Date       Updated Date  
+    0                         Today's Bank  September 23, 2016  November 17, 2016  
+    1                          United Bank     August 19, 2016  November 17, 2016  
+    2  First-Citizens Bank & Trust Company         May 6, 2016  September 6, 2016  
+    3           The Bank of Fayette County      April 29, 2016  September 6, 2016  
+    4  First-Citizens Bank & Trust Company      March 11, 2016      June 16, 2016
+
+
+    # Now, we'll compute the number of bank failures by year
+    >>> close_timestamps = pd.to_datetime(failures['Closing Date'])
+    >>> close_timestamps.dt.year.value_counts()
+
+    2010    157
+    2009    140
+    2011     92
+    2012     51
+    2008     25
+            ... 
+    2004      4
+    2001      4
+    2007      3
+    2003      3
+    2000      2
+    Name: Closing Date, Length: 15, dtype: int64
+
+
 
 - Parsing XML With LXML.Objectify
+
+    # Here we use 'lxml.objectify' to parse an xml file and get a reference to the
+    #   root node
+    >>> from lxml import objectify
+    >>> path = 'datasets/mta_perf/Performance_MNR.xml'
+    >>> parsed = objectify.parse(open(path))
+    >>> root = parsed.getroot()
+
+    # Now, we can populate a dict of tag names to data values
+    >>> data = []
+    >>> skip_fields = ['PARENT_SEQ', 'INDICATOR_SEQ', 'DESIRED_CHANGE', 'DECIMAL_PLACES']
+
+    # root.INDICATOR is a generator that returns each <INCICATOR> xml element
+    >>> for elt in root.INDICATOR
+            el_data = {}
+            for child in elt.getchildren():
+                if child in skip_fields: continue
+                el_data[child.tag] = child.pyval
+            data.append(ed_data)
+
+    # Then, we can convert the list of dicts into a DataFrame
+    >>> perf = pd.DataFrame(data)
+
+
+    # 'lxml.objectify' can also parse XML Metadata using the StringIO module
+    >>> from io import StringIO
+    >>> tag = '<a href="http://www.google.com">Google</a>'
+    >>> root = objectify.parse(StringIO(tag)).getroot()
+
+    >>> root.get('href')
+    'http://www.google.com'
+
+    >>> root.text
+    'Google'
+
 
 
 - Binary Data Formats
