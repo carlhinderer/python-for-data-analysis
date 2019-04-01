@@ -113,3 +113,49 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
     # You can also create a threshold where you only keep rows containing a certain 
     #   number of observations.  To drop rows that contain 2 or more NA values:
     >>> df.dropna(thresh=2)
+
+
+
+- Filling In Missing Data
+
+    Instead of filtering out missing data, you may want to fill the holes with some
+      default value instead.  This is done with the pandas 'fillna' method.
+
+    # Replace all the NA values with a default value
+    >>> df.fillna(0)
+
+    # If you pass in a dict, a different value can be used for each column
+    >>> df.fillna({1: 0.5, 2: 0})
+
+
+    # Normally 'fillna' returns a new object.  To modify the existing object in place,
+    #   the 'inplace' option is used.
+    >>> _ = df.fillna(0, inplace=True)
+
+
+    # The same interpolation methods available for reindexing can also be used with
+    #   'fillna'.  Passing method='ffill' will take the last non-NA value in the 
+    #   column and use it to fill in each cell underneath.  Also passing in the 
+    #   'limit' option will fill only a specified number of cells.
+    >>> df.fillna(method='ffill')
+    >>> df.fillna(method='ffill', limit=2)
+
+    # Or maybe you want to just fill in the missing values with the column mean
+    >>> data = pd.Series([1., NA, 3.5, NA, 7])
+    >>> data.fillna(data.mean())
+
+
+
+- List of 'fillna' Arguments
+
+    Argument	Description
+    ----------------------------------------------------------------------------
+    value	    Scalar value or dict-like object to use to fill missing values
+
+    method	    Interpolation; by default 'ffill' if function called with no other arguments
+
+    axis	    Axis to fill on; default axis=0
+
+    inplace	    Modify the calling object without producing a copy
+
+    limit	    For forward and backward filling, maximum number of consecutive periods to fill
