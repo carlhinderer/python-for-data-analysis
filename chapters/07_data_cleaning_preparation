@@ -212,3 +212,52 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
     # By default, 'duplicated' and 'drop_duplicates' will keep the first observed
     #   value combination.  To keep the last one instead, use keep='last'.
     >>> data.drop_duplicates(['k1', 'k2'], keep='last')
+
+
+
+- Transforming Data Using a Function or Mapping
+
+    For many datasets, you may wish to perform some transformation based on the 
+      values in an array, Series, or column in a DataFrame.
+
+    # Consider the following data collected about various kinds of meat
+    >>> data = pd.DataFrame({'food': ['bacon', 'pulled pork', 'bacon',
+                                      'Pastrami', 'corned beef', 'Bacon',
+                                      'pastrami', 'honey ham', 'nova lox'],
+                             'ounces': [4, 3, 12, 6, 7.5, 8, 3, 5, 6]})
+    >>> data
+     
+              food  ounces
+    0        bacon     4.0
+    1  pulled pork     3.0
+    2        bacon    12.0
+    3     Pastrami     6.0
+    4  corned beef     7.5
+    5        Bacon     8.0
+    6     pastrami     3.0
+    7    honey ham     5.0
+    8     nova lox     6.0
+
+
+    # Now, supposed you wanted to add a column indicating the type of animal that
+    #   each food came from.  Here is a mapping for that:
+    >>> meat_to_animal = {
+         'bacon': 'pig',
+         'pulled pork': 'pig',
+         'pastrami': 'cow',
+         'corned beef': 'cow',
+         'honey ham': 'pig',
+         'nova lox': 'salmon'
+        }
+
+
+    # One problem we have when matching columns is that some of the foods are
+    #   capitalized in data['food'].  So, we'll get a lowercase version of that column.
+    >>> lowercased = data['food'].str.lower()
+
+    # Now, we can add the new column
+    >>> data['animal'] = lowercased.map(meat_to_animal)
+
+
+    # Alternatively, we could just pass a function that does all the work
+    >>> data['animal'] = data['food'].map(lambda x: meat_to_animal[x.lower()])
