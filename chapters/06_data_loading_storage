@@ -590,3 +590,46 @@ CHAPTER 06 - DATA LOADING AND STORAGE
     # The pandas 'read_hdf' and 'to_hdr' functions give you shortcuts to these tools
     >>> frame.to_hdf('mydata.h5', 'obj3', format='table')
     >>> pd.read_hdf('mydata.h5', 'obj3', where=['index < 5'])
+
+
+
+- Reading Excel Files
+
+    pandas supports reading from Excel files (2003+) using the 'ExcelFile' class or
+      the built-in 'read_excel' function.  These tools use the 'xlrd' and 'openpyxl'
+      libraries under the hood.
+
+
+    # Read an excel file
+    >>> xlsx = pd.ExcelFile('examples/ex1.xslx')
+    >>> df = pd.read_excel(xslx, 'Sheet1')
+
+    # Write to an excel file
+    >>> writer = pd.ExcelWriter('examples/ex2.xslx')
+    >>> frame.to_excel(writer, 'Sheet1')
+    >>> writer.save()
+
+    # More concise write syntax
+    >>> frame.to_excel('examples/ex2.xslx')
+
+
+- Interacting With Web APIs
+
+    There are a number of ways to interact with web APIs from Python.  One of the most
+      common is the 'requests' package.
+
+
+    # Get the last 30 issues for pandas on GitHub
+    >>> import requests
+    >>> url = 'https://api.github.com/repos/pandas-dev/pandas/issues'
+    >>> resp = requests.get(url)
+    >>> resp
+    <Response [200]>
+
+    # Get the json returned in the response
+    >>> data = resp.json()
+    >>> data[0]['title']
+    'BUG: rank with +-inf, #6945'
+
+    # Convert the json dictionary to a DataFrame
+    >>> issues = pd.DataFrame(data, columns=['number', 'title', 'labels', 'state'])
