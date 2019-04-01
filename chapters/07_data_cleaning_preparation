@@ -59,3 +59,57 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
     isnull	        Return boolean values indicating which values are missing/NA.
 
     notnull	        Negation of isnull.
+
+
+
+- Filtering Out Missing Data in Series
+
+    # Using the 'dropna' method on a Series will return only the non-null data 
+    #   and index values
+
+    >>> from numpy import nan as NA
+    >>> data = pd.Series([1, NA, 3.5, NA, 7])
+    >>> data.drop_na()
+
+    0    1.0
+    2    3.5
+    4    7.0
+    dtype: float64
+
+    # This is equivalent
+    >>> data[data.notnull()]
+
+
+
+- Filtering Out Missing Data in DataFrames
+
+    With DataFrames, things are a bit more complex.  You may want to drop rows or 
+      columns that are all NA or those containing any NAs.  By default, 'dropna'
+      drops any row containing a missing value.
+
+    >>> data = data = pd.DataFrame([[1., 6.5, 3.], [1., NA, NA],
+                                    [NA, NA, NA], [NA, 6.5, 3.]])
+
+    >>> cleaned = data.dropna()
+    >>> data
+         0    1    2
+    0  1.0  6.5  3.0
+    1  1.0  NaN  NaN
+    2  NaN  NaN  NaN
+    3  NaN  6.5  3.0
+
+    >>> cleaned
+         0    1    2
+    0  1.0  6.5  3.0
+
+
+    # Passing how='all' will only drop rows that are all NA
+    >>> data.dropna(how='all')
+
+    # To drop columns that are all NA, use axis=1
+    >>> data.dropna(axis=1, how='all')
+
+
+    # You can also create a threshold where you only keep rows containing a certain 
+    #   number of observations.  To drop rows that contain 2 or more NA values:
+    >>> df.dropna(thresh=2)
