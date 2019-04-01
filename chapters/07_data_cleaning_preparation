@@ -1,0 +1,61 @@
+------------------------------------------------------
+CHAPTER 07 - DATA CLEANING AND PREPARATION
+------------------------------------------------------
+
+- Handling Missing Data
+
+    For numeric data, pandas uses the floating point NaN to represent missing data.
+      This can be easily detected.
+
+    >>> string_data = pd.Series(['aardvark', 'artichoke', np.nan, 'avocado'])
+    >>> string_data
+
+    0     aardvark
+    1    artichoke
+    2          NaN
+    3      avocado
+    dtype: object
+    
+    >>> string_data.isnull()
+    
+    0    False
+    1    False
+    2     True
+    3    False
+    dtype: bool
+
+
+    In pandas, we've adopted a convention (used in R) by referring to missing data as
+      NA.  This may refer to data that either doesn't exist or wasn't observed.  
+
+    When cleaning up data for analysis, it is important to do analysis on why there is
+      missing data in the first place.  Were there data collection problems?  Are there
+      potential biases in the data caused by the missing values?
+
+
+    # The Python value 'None' is also treated as NA in object arrays
+    >>> string_data[0] = None
+    >>> string_data.isnull()
+
+    0    False
+    1    False
+    2     True
+    3    False
+    dtype: bool
+
+
+
+- List of NA Handling Methods
+
+    Argument	    Description
+    --------------------------------------------------------------------------------
+    dropna	        Filter axis labels based on whether values for each label have 
+                      missing data, with varying thresholds for how much missing 
+                      data to tolerate.
+
+    fillna	        Fill in missing data with some value or using an interpolation 
+                      method such as 'ffill' or 'bfill'.
+
+    isnull	        Return boolean values indicating which values are missing/NA.
+
+    notnull	        Negation of isnull.
