@@ -159,3 +159,56 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
     inplace	    Modify the calling object without producing a copy
 
     limit	    For forward and backward filling, maximum number of consecutive periods to fill
+
+
+
+- Removing Duplicates
+
+    Duplicate rows may be found in DataFrames for any number of reasons.
+
+    # Create a DataFrame with a duplicate row
+    >>> data = pd.DataFrame({'k1': ['one', 'two'] * 3 + ['two'],
+                            'k2': [1, 1, 2, 3, 3, 4, 4]})
+
+    >>> data
+        k1  k2
+    0  one   1
+    1  two   1
+    2  one   2
+    3  two   3
+    4  one   3
+    5  two   4
+    6  two   4
+
+    >>> data.duplicated()
+    0    False
+    1    False
+    2    False
+    3    False
+    4    False
+    5    False
+    6     True
+    dtype: bool
+
+
+    # Sometimes, you just want to drop all the duplicates
+    >>> data.drop_duplicates()
+        k1  k2
+    0  one   1
+    1  two   1
+    2  one   2
+    3  two   3
+    4  one   3
+    5  two   4
+
+    # Or, you can drop duplicates based on a single column's values
+    >>> data['v1'] = range(7)
+    >>> data.drop_duplicates(['k1'])
+        k1  k2  v1
+    0  one   1   0
+    1  two   1   1
+
+
+    # By default, 'duplicated' and 'drop_duplicates' will keep the first observed
+    #   value combination.  To keep the last one instead, use keep='last'.
+    >>> data.drop_duplicates(['k1', 'k2'], keep='last')
