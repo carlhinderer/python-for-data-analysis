@@ -429,8 +429,81 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
 - Detecting and Filtering Outliers
 
+    Filtering or transforming outliers is largely a matter of applying array operations.
+
+
+    # Create a DataFrame with some normally distributed data
+    >>> data = pd.DataFrame(np.random.randn(1000, 4))
+
+    # Find values in one of the columns exceeding 3 in absolute values
+    >>> col = data[2]
+    >>> col[np.abs(col) > 3]
+
+    41    -3.399312
+    136   -3.745356
+    Name: 2, dtype: float64
+
+
+    # Select all rows having a value exceeding 3 or -3
+    >>> data[(np.abs(data) > 3).any(1)]
+
+
+    # Cap values at 3 or -3
+    >>> data[np.abs(data) > 3] = np.sign(data) * 3
+
+
 
 - Permutation and Random Sampling
+
+    Permuting (randomly reordering) a Series or the rows in a DataFrame is easy to do
+      using the 'numpy.random.permutation' function.
+
+
+    # Create a DataFrame
+    >>> df = pd.DataFrame(np.arange(20).reshape((5, 4)))
+
+    # Get a random permutation of the column indexes
+    >>> sampler = np.random.permutation(5)
+    >>> sampler
+    array([3, 1, 4, 2, 0])
+
+    # Reorder the columns using the permutation array
+    >>> df.take(sampler)
+
+        0   1   2   3
+    3  12  13  14  15
+    1   4   5   6   7
+    4  16  17  18  19
+    2   8   9  10  11
+    0   0   1   2   3
+
+
+    # We can also select a random subset without replacement
+    >>> df.sample(n=3)
+
+        0   1   2   3
+    3  12  13  14  15
+    4  16  17  18  19
+    2   8   9  10  11
+
+
+    # Or we can select a random sample with replacement
+    >>> choices = pd.Series([5, 7, -1, 6, 4])
+    >>> draws = df.sample(n=10, replace=True)
+    >>> draws
+
+    4    4
+    1    7
+    4    4
+    2   -1
+    0    5
+    3    6
+    1    7
+    4    4
+    0    5
+    4    4
+    dtype: int64
+
 
 
 - Computing Indicator/Dummy Variables
