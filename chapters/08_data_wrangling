@@ -57,3 +57,64 @@ CHAPTER 08 - DATA WRANGLING
     c    0.092908
     d    0.281746
     dtype: float64
+
+
+
+- Stacking and Unstacking
+
+    Hierarchical indexing plays an important role in reshaping data and group-based operations
+      like forming a pivot table.  
+
+
+    # Unstacking into a flat DataFrame
+    >>> data.unstack()
+
+              1         2         3
+    a -0.204708  0.478943 -0.519439
+    b -0.555730       NaN  1.965781
+    c  1.393406  0.092908       NaN
+    d       NaN  0.281746  0.769023
+
+
+    # Stacking is the opposite of unstacking
+    >>> data.unstack().stack()
+
+    a  1   -0.204708
+       2    0.478943
+       3   -0.519439
+    b  1   -0.555730
+       3    1.965781
+    c  1    1.393406
+       2    0.092908
+    d  2    0.281746
+       3    0.769023
+    dtype: float64
+
+
+
+- Column-Level Hierarchical Indexes
+
+    # Either axis of a DataFrame can have a hierarchical index
+    >>> frame = pd.DataFrame(np.arange(12).reshape((4, 3)),
+                             index=[['a', 'a', 'b', 'b'], [1, 2, 1, 2]],
+                             columns=[['Ohio', 'Ohio', 'Colorado'],
+                                      ['Green', 'Red', 'Green']])
+    >>> frame
+    
+           Ohio     Colorado
+        Green Red    Green
+    a 1     0   1        2
+      2     3   4        5
+    b 1     6   7        8
+      2     9  10       11
+
+
+   # Select from hierarchical column
+   >>> frame['Ohio']
+
+    color      Green  Red
+    key1 key2            
+    a    1         0    1
+         2         3    4
+    b    1         6    7
+         2         9   10
