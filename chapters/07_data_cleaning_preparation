@@ -508,6 +508,109 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
 - Computing Indicator/Dummy Variables
 
+    Another type of transformation for statistical modeling or machine learning applications
+      is converting a categorical variable into a 'dummy' or 'indicator' matrix.  If a column
+      in a DataFrame has k distinct values, you would derive a matrix with k columns containing
+      all 1's and 0's.  pandas has a 'get_dummies' function for doing this.
+
+    >>> df = pd.DataFrame({'key': ['b', 'b', 'a', 'c', 'a', 'b'], 'data1': range(6)})
+    >>> df
+
+      key  data1
+    0   b      0
+    1   b      1
+    2   a      2
+    3   c      3
+    4   a      4
+    5   b      5
+
+
+    # Get dummy matrix
+    >>> pd.get_dummies(df['key'])
+
+       a  b  c
+    0  0  1  0
+    1  0  1  0
+    2  1  0  0
+    3  0  0  1
+    4  1  0  0
+    5  0  1  0
+
+
+    # Add a prefix to columns in indicator matrix, which can then be merged with other data.
+    >>> dummies = pd.get_dummies(df['key', prefix='key'])
+    >>> df_with_dummy = df[['data1']].join(dummies)
+    >>> df_with_dummy
+
+       data1  key_a  key_b  key_c
+    0      0      0      1      0
+    1      1      0      1      0
+    2      2      1      0      0
+    3      3      0      0      1
+    4      4      1      0      0
+    5      5      0      1      0 
+
+
+
+- Example - Dummy Variables for Movie Genres
+
+    # Load the MovieLens dataset
+    >>> mnames = ['movie_id', 'title', 'genres']
+    >>> movies = pd.read_table('datasets/movielens/movies.dat', sep='::', 
+                               header=None, names=mnames)
+    >>> movies[:10]
+
+       movie_id                               title                        genres
+    0         1                    Toy Story (1995)   Animation|Children's|Comedy
+    1         2                      Jumanji (1995)  Adventure|Children's|Fantasy
+    2         3             Grumpier Old Men (1995)                Comedy|Romance
+    3         4            Waiting to Exhale (1995)                  Comedy|Drama
+    4         5  Father of the Bride Part II (1995)                        Comedy
+    5         6                         Heat (1995)         Action|Crime|Thriller
+    6         7                      Sabrina (1995)                Comedy|Romance
+    7         8                 Tom and Huck (1995)          Adventure|Children's
+    8         9                 Sudden Death (1995)                        Action
+    9        10                    GoldenEye (1995)     Action|Adventure|Thriller
+
+
+    # Getting our indicator matrix here requires some wrangling.
+    #   First, we we extract the list of unique genres
+    >>> all_genres = []
+    >>> for x in movies.genres: all_genres.extend(x.split('|'))
+    >>> genres = pd.unique(all_genres)
+    >>> genres
+
+    array(['Animation', "Children's", 'Comedy', 'Adventure', 'Fantasy',
+           'Romance', 'Drama', 'Action', 'Crime', 'Thriller', 'Horror',
+           'Sci-Fi', 'Documentary', 'War', 'Musical', 'Mystery', 'Film-Noir',
+           'Western'], dtype=object)
+
+
+    # One way to construct the indicator DataFrame is to start with all zeros
+    >>> zero_matrix = np.zeros((len(movies), len(genres)))
+    >>> dummies = pd.DataFrame(zero_matrix, columns=genres)
+    >>> dummies
+
+
+    # Now, iterate through each movie and set entries in each row of 'dummies' to 1
+    >>> gen = movies.genres[0]
+    >>> gen.split('|')
+    ['Animation', "Children's", 'Comedy']
+
+    >>> dummies.columns.get_indexer(gen.split('|'))
+    array([0, 1, 2])
+
+
+    # Then, we can use 'iloc' to set values based on the indexes
+    >>> for i, gen in enumerate(movies.genres):
+            indices = dummies.columns.get_indexer(gen.split('|'))
+            dummies.iloc[i, indices] = 1
+
+
+    # Then, you combine this with 'movies'
+    >>> movies_windic = movies.join(dummies.add_prefix('Genre_'))
+
+
 
 - Using String Manipulation
 
