@@ -708,5 +708,94 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
 - Vectorized String Functions in pandas
 
+    Both string and regex methods can be applied to each value in a pandas object using 
+      the 'map' method, but it will fail on the 'NA' values.  To cope with this, 'Series'
+      has array-oriented methods for string operations that skip NA values.
+
+    >>> data.str.contains('gmail')
+    Dave     False
+    Rob       True
+    Steve     True
+    Wes        NaN
+
+
+    >>> data.str.findall(pattern, flags=re.IGNORECASE)
+    Dave     [(dave, google, com)]
+    Rob        [(rob, gmail, com)]
+    Steve    [(steve, gmail, com)]
+    Wes                        NaN
+    dtype: object
+
+
+    # Either of these can be used to access elements in embedded lists
+    >>> matches.str.get(1)
+    >>> matches.str[0]
+
+    # To slice strings
+    >>> data.str[:5]
+
+
+
 
 - List of Vectorized String Methods
+
+    Method	         Description
+    ------------------------------------------------------------------------------------
+    cat	             Concatenate strings element-wise with optional delimiter
+
+    contains	     Return boolean array if each string contains pattern/regex
+
+    count	         Count occurrences of pattern
+
+    extract	         Use a regular expression with groups to extract one or more strings 
+                       from a Series of strings; the result will be a DataFrame with one 
+                       column per group
+
+    endswith	     Equivalent to x.endswith(pattern) for each element
+
+    startswith	     Equivalent to x.startswith(pattern) for each element
+
+    findall	         Compute list of all occurrences of pattern/regex for each string
+
+    get	             Index into each element (retrieve i-th element)
+
+    isalnum	         Equivalent to built-in str.alnum
+
+    isalpha	         Equivalent to built-in str.isalpha
+
+    isdecimal	     Equivalent to built-in str.isdecimal
+
+    isdigit	         Equivalent to built-in str.isdigit
+
+    islower	         Equivalent to built-in str.islower
+
+    isnumeric	     Equivalent to built-in str.isnumeric
+
+    isupper	         Equivalent to built-in str.isupper
+
+    join	         Join strings in each element of the Series with passed separator
+
+    len	             Compute length of each string
+
+    lower, upper	 Convert cases; equivalent to x.lower() or x.upper() for each element
+
+    match	         Use re.match with the passed regular expression on each element, 
+                       returning matched groups as list
+
+    pad	             Add whitespace to left, right, or both sides of strings
+
+    center	         Equivalent to pad(side='both')
+
+    repeat	         Duplicate values (e.g., s.str.repeat(3) is equivalent to x * 3 for each string)
+
+    replace	         Replace occurrences of pattern/regex with some other string
+
+    slice	         Slice each string in the Series
+
+    split	         Split strings on delimiter or regular expression
+
+    strip	         Trim whitespace from both sides, including newlines
+
+    rstrip	         Trim whitespace on right side
+
+    lstrip	         Trim whitespace on left side
