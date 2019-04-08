@@ -640,13 +640,14 @@ CHAPTER 06 - DATA LOADING AND STORAGE
 
     # Create a sqlite db
     >>> import sqlite3
-    >>> query = query = """
+    >>> query = """
     .....: CREATE TABLE test
     .....: (a VARCHAR(20), b VARCHAR(20),
     .....:  c REAL,        d INTEGER
     .....: );"""
 
     >>> con = sqlite3.connect('mydata.sqlite')
+    >>> con.execute(query)
     >>> con.commit()
 
 
