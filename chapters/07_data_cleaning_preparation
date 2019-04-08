@@ -612,13 +612,98 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
 
 
-- Using String Manipulation
-
-
 - Using Regular Expressions
+
+    # Split using a regex
+    >>> import re
+    >>> text = "foo    bar\t baz  \tqux"
+    >>> re.split('\s+', text)
+    ['foo', 'bar', 'baz', 'qux']
+
+
+    # Compile your regex to make it reusable
+    >>> regex = re.compile('\s+')
+    >>> regex.split(text)
+    ['foo', 'bar', 'baz', 'qux']
+
+
+    # Get a list of all patterns matching the regex
+    >>> regex.findall(text)
+    ['    ', '\t ', '  \t']
+
+
+    # Regex capable of identifying most email addresses
+    >>> text = """Dave dave@google.com
+    Steve steve@gmail.com
+    Rob rob@gmail.com
+    Ryan ryan@yahoo.com
+    """
+
+    >>> pattern = r'[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}'
+    >>> regex = re.compile(pattern, flags=re.IGNORECASE)
+
+    # 'search' returns only the first match
+    >>> m = regex.search(text)
+    >>> m
+    <_sre.SRE_Match object; span=(5, 20), match='dave@google.com'>
+
+    >>> text[m.start():m.end()]
+    'dave@google.com'
+
+    
+    # 'sub' replaces the matched string with a new string
+    >>> print(regex.sub('REDACTED', text))
+    Dave REDACTED
+    Steve REDACTED
+    Rob REDACTED
+    Ryan REDACTED
+
+
+    # Split email addresses into username, domain name, and domain suffix
+    >>> pattern = r'([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})'
+    >>> regex = re.compile(pattern, flags=re.IGNORECASE)
+    >>> m = regex.match('wesm@bright.net')
+    >>> m.groups()
+    ('wesm', 'bright', 'net')
+
+    # 'findall' returns a list of tuples when the pattern has groups:
+    >>> regex.findall(text) 
+    [('dave', 'google', 'com'),
+     ('steve', 'gmail', 'com'),
+     ('rob', 'gmail', 'com'),
+     ('ryan', 'yahoo', 'com')]
+
+    # 'sub' also has access to groups using symbols '\1', '\2', '\3', etc.
+    >>> print(regex.sub(r'Username: \1, Domain: \2, Suffix: \3', text))
+    Dave Username: dave, Domain: google, Suffix: com
+    Steve Username: steve, Domain: gmail, Suffix: com
+    Rob Username: rob, Domain: gmail, Suffix: com
+    Ryan Username: ryan, Domain: yahoo, Suffix: com
+
 
 
 - List of Regular Expression Methods
+
+    Argument	    Description
+    ------------------------------------------------------------------------------
+    findall	        Return all non-overlapping matching patterns in a string as a list
+
+    finditer	    Like findall, but returns an iterator
+
+    match	        Match pattern at start of string and optionally segment pattern components 
+                      into groups; if the pattern matches, returns a match object, and otherwise 
+                      None
+
+    search	        Scan string for match to pattern; returning a match object if so; unlike 
+                      match, the match can be anywhere in the string as opposed to only at the 
+                      beginning
+
+    split	        Break string into pieces at each occurrence of pattern
+
+    sub, subn	    Replace all (sub) or first n occurrences (subn) of pattern in string with 
+                      replacement expression; use symbols \1, \2, ... to refer to match group 
+                      elements in the replacement string
+
 
 
 - Vectorized String Functions in pandas
