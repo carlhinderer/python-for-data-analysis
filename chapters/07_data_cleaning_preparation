@@ -343,6 +343,89 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
 - Discretization and Binning
 
+    Continuous data is often discretized or otherwise separated into bins for analysis.
+      Suppose you have data about a group of people in a study, and you want to group
+      them into discrete age buckets:
+
+    >>> ages = [20, 22, 25, 27, 21, 23, 37, 31, 61, 45, 41, 32]
+    >>> bins = [18, 25, 35, 60, 100]
+
+    # Now we put our data points into bins with the 'cut' function
+    >>> cats = pd.cut(ages, bins)
+    >>> cats
+
+    [(18, 25], (18, 25], (18, 25], (25, 35], (18, 25], ..., (25, 35], (60, 100], (35, 60], 
+     (35, 60], (25, 35]]
+    Length: 12
+    Categories (4, interval[int64]): [(18, 25] < (25, 35] < (35, 60] < (60, 100]]
+
+
+    # The object that 'pandas.cut' returns is a special 'Categorical' object.
+    # Calling 'codes' will return an array of the bins of each data point
+    >>> cats.codes
+    array([0, 0, 0, 1, 0, 0, 2, 1, 3, 2, 2, 1], dtype=int8)
+
+    # 'categories' will give you an array of the bins themselves
+    >>> cats.categories
+    IntervalIndex([(18, 25], (25, 35], (35, 60], (60, 100]]
+                  closed='right',
+                  dtype='interval[int64]')
+
+    # 'value_counts' returns the list of bins and their counts
+    >>> pd.value_counts(cats)
+
+
+    # By default, the intervals are open on the left side and closed on the right side [)
+    #   To switch this, you can pass 'right=False'
+    >>> pd.cut(ages, [18, 26, 36, 61, 100], right=False)
+
+
+    # You can pass your own bin names to the 'labels' option
+    >>> group_names = ['Youth', 'YoungAdult', 'MiddleAged', 'Senior']
+    >>> pd.cut(ages, bins, labels=group_names)
+
+    [Youth, Youth, Youth, YoungAdult, Youth, ..., YoungAdult, Senior, MiddleAged, Mid
+     dleAged, YoungAdult]
+    Length: 12
+    Categories (4, object): [Youth < YoungAdult < MiddleAged < Senior]
+
+
+    # If you pass an integer number of bins rather than explicit bin edges, that number
+    #   of equal-size bins will be created
+    >>> data = np.random.rand(20)
+    >>> pd.cut(data, 4, precision=2)
+
+    [(0.34, 0.55], (0.34, 0.55], (0.76, 0.97], (0.76, 0.97], (0.34, 0.55], ..., (0.34
+    , 0.55], (0.34, 0.55], (0.55, 0.76], (0.34, 0.55], (0.12, 0.34]]
+    Length: 20
+    Categories (4, interval[float64]): [(0.12, 0.34] < (0.34, 0.55] < (0.55, 0.76] < 
+    (0.76, 0.97]]
+
+
+    # The 'qcut' function bins the data based on sample quantiles
+    >>> data = np.random.randn(1000)
+    >>> cats = pd.qcut(data, 4)
+    >>> cats
+
+    [(-0.0265, 0.62], (0.62, 3.928], (-0.68, -0.0265], (0.62, 3.928], (-0.0265, 0.62]
+    , ..., (-0.68, -0.0265], (-0.68, -0.0265], (-2.95, -0.68], (0.62, 3.928], (-0.68, -0.0265]]
+    Length: 1000
+    Categories (4, interval[float64]): [(-2.95, -0.68] < (-0.68, -0.0265] < (-0.0265, 0.62] <
+                                    (0.62, 3.928]]
+
+    >>> pd.value_counts(cats)
+
+    (0.62, 3.928]       250
+    (-0.0265, 0.62]     250
+    (-0.68, -0.0265]    250
+    (-2.95, -0.68]      250
+    dtype: int64
+
+
+    # You can also pass in your own quantiles
+    >>> pd.qcut(data, [0, 0.1, 0.5, 0.9, 1.])
+
+
 
 - Detecting and Filtering Outliers
 
