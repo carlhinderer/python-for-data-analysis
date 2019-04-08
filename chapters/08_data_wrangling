@@ -1,0 +1,59 @@
+------------------------------------------------------
+CHAPTER 08 - DATA WRANGLING
+------------------------------------------------------
+
+- Hierarchical Indexing
+
+    'Hierarchical indexing' is an important feature of pandas that enables you to have
+      2 or more index levels on an axis.  It provides a way to work with higher dimensional
+      data in a lower dimensional form.
+
+
+    # Create a series with a hierarchical index
+    >>> data = pd.Series(np.random.randn(9),
+                         index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
+                                [1, 2, 3, 1, 3, 1, 2, 2, 3]])
+    >>> data
+    a  1   -0.204708
+       2    0.478943
+       3   -0.519439
+    b  1   -0.555730
+       3    1.965781
+    c  1    1.393406
+       2    0.092908
+    d  2    0.281746
+       3    0.769023
+    dtype: float64
+
+    >>> data.index
+    MultiIndex(levels=[['a', 'b', 'c', 'd'], [1, 2, 3]],
+               labels=[[0, 0, 0, 1, 1, 2, 2, 3, 3], [0, 1, 2, 0, 2, 0, 1, 1, 2]])
+
+
+    # With a hierarchical indexed object, partial indexing can be used
+    >>> data['b']
+    1   -0.555730
+    3    1.965781
+    dtype: float64
+
+    >>> data['b':'c'] 
+    b  1   -0.555730
+       3    1.965781
+    c  1    1.393406
+       2    0.092908
+    dtype: float64
+
+    >>> data.loc[['b', 'd']]
+    b  1   -0.555730
+       3    1.965781
+    d  2    0.281746
+       3    0.769023
+    dtype: float64
+
+
+    # Selection from an inner level is possible
+    >>> data.loc[:, 2]
+    a    0.478943
+    c    0.092908
+    d    0.281746
+    dtype: float64
