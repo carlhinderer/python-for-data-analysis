@@ -198,6 +198,66 @@ CHAPTER 08 - DATA WRANGLING
 
 - Indexing With a DataFrame's Columns
 
+    # Create a DataFrame
+    >>> frame = pd.DataFrame({'a': range(7), 
+                              'b': range(7, 0, -1),
+                              'c': ['one', 'one', 'one', 'two', 'two', 'two', 'two'],
+                              'd': [0, 1, 2, 0, 1, 2, 3]})
+    >>> frame
+ 
+       a  b    c  d
+    0  0  7  one  0
+    1  1  6  one  1
+    2  2  5  one  2
+    3  3  4  two  0
+    4  4  3  two  1
+    5  5  2  two  2
+    6  6  1  two  3
+
+
+    # Use 'set_index' to use columns as the index
+    >>> frame2 = frame.set_index(['c', 'd'])
+    >>> frame2
+
+            a  b
+    c    d      
+    one  0  0  7
+         1  1  6
+         2  2  5
+    two  0  3  4
+         1  4  3
+         2  5  2
+         3  6  1
+
+
+    # Use the columns as indexes, but keep the columns
+    >>> frame.set_index(['c', 'd'], drop=False)
+
+           a  b    c  d
+    c   d              
+    one 0  0  7  one  0
+        1  1  6  one  1
+        2  2  5  one  2
+    two 0  3  4  two  0
+        1  4  3  two  1
+        2  5  2  two  2
+        3  6  1  two  3
+    
+    
+    # 'reset_index' does the opposite of 'set_index':
+    >>> frame2.reset_index()
+    
+         c  d  a  b
+    0  one  0  0  7
+    1  one  1  1  6
+    2  one  2  2  5
+    3  two  0  3  4
+    4  two  1  4  3
+    5  two  2  5  2
+    6  two  3  6  1
+
+
+
 - Combining and Merging Datasets
 
 - Database-Style DataFrame Joins
