@@ -446,7 +446,91 @@ CHAPTER 08 - DATA WRANGLING
 
 - List of Merge Function Arguments
 
+    Argument	       Description
+    ---------------------------------------------------------------------------------
+    left	           DataFrame to be merged on the left side.
+
+    right	           DataFrame to be merged on the right side.
+
+    how	               One of 'inner', 'outer', 'left', or 'right'; defaults to 'inner'.
+
+    on	               Column names to join on. Must be found in both DataFrame objects. If not 
+                         specified and no other join keys given, will use the intersection of 
+                         the column names in left and right as the join keys.
+
+    left_on	           Columns in left DataFrame to use as join keys.
+
+    right_on	       Analogous to left_on for left DataFrame.
+
+    left_index	       Use row index in left as its join key (or keys, if a MultiIndex).
+
+    right_index	       Analogous to left_index.
+
+    sort	           Sort merged data lexicographically by join keys; True by default (disable 
+                         to get better performance in some cases on large datasets).
+
+    suffixes	       Tuple of string values to append to column names in case of overlap; 
+                         defaults to ('_x', '_y') (e.g., if 'data' in both DataFrame objects, 
+                         would appear as 'data_x' and 'data_y' in result).
+
+    copy	           If False, avoid copying data into resulting data structure in some 
+                         exceptional cases; by default always copies.
+
+    indicator          Adds a special column _merge that indicates the source of each row; 
+                         values will be 'left_only', 'right_only', or 'both' based on the origin 
+                         of the joined data in each row.
+
+
+
 - Merging on Index
+
+    In some cases, the merge key in a DataFrame will be found in its index.  In this
+      case, you can pass 'left_index=True' or 'right_index=True' (or both) to indicate
+      that the index should be used as the merge key.
+
+
+    # Create DataFrames
+    >>> left1 = pd.DataFrame({'key': ['a', 'b', 'a', 'a', 'b', 'c'],
+                              'value': range(6)})
+
+    >>> right1 = pd.DataFrame({'group_val': [3.5, 7]}, 
+                               index=['a', 'b'])
+    >>> left1
+      key  value
+    0   a      0
+    1   b      1
+    2   a      2
+    3   a      3
+    4   b      4
+    5   c      5
+    
+    >>> right1 
+       group_val
+    a        3.5
+    b        7.0
+    
+
+    # Use the index as the merge key
+    >>> pd.merge(left1, right1, left_on='key', right_index=True)
+      key  value  group_val
+    0   a      0        3.5
+    2   a      2        3.5
+    3   a      3        3.5
+    1   b      1        7.0
+    4   b      4        7.0
+
+
+    # Form a union with an outer join instead
+    >>> pd.merge(left1, right1, left_on='key', right_index=True, how='outer')
+      key  value  group_val
+    0   a      0        3.5
+    2   a      2        3.5
+    3   a      3        3.5
+    1   b      1        7.0
+    4   b      4        7.0
+    5   c      5        NaN
+
+
 
 - Concatenating Along An Axis
 
