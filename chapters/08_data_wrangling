@@ -118,3 +118,102 @@ CHAPTER 08 - DATA WRANGLING
          2         3    4
     b    1         6    7
          2         9   10
+
+
+
+- Reordering and Sorting Levels
+
+    At times, we will need to rearrange the order of the levels on the axis or sort the data
+      by the values in one specific level.  The 'swaplevel' takes 2 level numbers or names
+      and returns a new object with the levels interchanges.
+
+
+    >>> frame.swaplevel('key1', 'key2')
+
+    state      Ohio     Colorado
+    color     Green Red    Green
+    key2 key1                   
+    1    a        0   1        2
+    2    a        3   4        5
+    1    b        6   7        8
+    2    b        9  10       11
+
+
+    The 'sort_index' method sorts the data using only the values in a single level.  When
+      swapping levels, it's not uncommon to also use 'sort_index' so that the result is
+      lexicographically sorted by the indicated level.
+
+
+    # Sort on 'key2'
+    >>> frame.sort_index(level=1)
+
+    state      Ohio     Colorado
+    color     Green Red    Green
+    key1 key2                   
+    a    1        0   1        2
+    b    1        6   7        8
+    a    2        3   4        5
+    b    2        9  10       11
+    
+
+    >>> frame.swaplevel(0, 1).sort_index(level=0)
+    Out[26]: 
+    state      Ohio     Colorado
+    color     Green Red    Green
+    key2 key1                   
+    1    a        0   1        2
+         b        6   7        8
+    2    a        3   4        5
+         b        9  10       11
+
+
+
+- Summary Statistics by Level
+
+    Many of the DataFrame's descriptive and summary statistics have a 'level' option in 
+      which you can specify the level you want to aggregate on a particular axis.
+
+
+    # Aggregate rows
+    >>> frame.sum(level='key2')
+
+    state  Ohio     Colorado
+    color Green Red    Green
+    key2                    
+    1         6   8       10
+    2        12  14       16
+    
+
+    # Aggregate columns
+    >>> frame.sum(level='color', axis=1)
+
+    color      Green  Red
+    key1 key2            
+    a    1         2    1
+         2         8    4
+    b    1        14    7
+         2        20   10
+
+
+
+- Indexing With a DataFrame's Columns
+
+- Combining and Merging Datasets
+
+- Database-Style DataFrame Joins
+
+- List of Merge Function Arguments
+
+- Merging on Index
+
+- Concatenating Along An Axis
+
+- List of 'concat' Function Arguments
+
+- Combining Data With Overlap
+
+- Reshaping With Hierarchical Indexing
+
+- Pivoting 'Long' to 'Wide' Format
+
+- Pivoting 'Wide' to 'Long' Format
