@@ -328,6 +328,32 @@ CHAPTER 08 - DATA WRANGLING
 
 
 
+- Outer Joins
+
+    # Take the outer join
+    >>> pd.merge(df1, df2, how='outer')
+
+       data1 key  data2
+    0    0.0   b    1.0
+    1    1.0   b    1.0
+    2    6.0   b    1.0
+    3    2.0   a    0.0
+    4    4.0   a    0.0
+    5    5.0   a    0.0
+    6    3.0   c    NaN
+    7    NaN   d    2.0
+
+- List of Different Join Types with the 'how' Argument
+
+    Option	    Behavior
+    -----------------------------------------------------------------------
+    'inner'	    Use only the key combinations observed in both tables
+    'left'	    Use all key combinations found in the left table
+    'right'	    Use all key combinations found in the right table
+    'outer'	    Use all key combinations observed in both tables together
+
+
+
 - List of Merge Function Arguments
 
 - Merging on Index
