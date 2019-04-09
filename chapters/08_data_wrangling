@@ -343,6 +343,8 @@ CHAPTER 08 - DATA WRANGLING
     6    3.0   c    NaN
     7    NaN   d    2.0
 
+
+
 - List of Different Join Types with the 'how' Argument
 
     Option	    Behavior
@@ -351,6 +353,94 @@ CHAPTER 08 - DATA WRANGLING
     'left'	    Use all key combinations found in the left table
     'right'	    Use all key combinations found in the right table
     'outer'	    Use all key combinations observed in both tables together
+
+
+
+- Many-to-Many Merges
+
+    # Create DataSets
+    >>> df1 = pd.DataFrame({'key': ['b', 'b', 'a', 'c', 'a', 'b'],
+                            'data1': range(6)})
+
+    >>> df2 = pd.DataFrame({'key': ['a', 'b', 'a', 'b', 'd'],
+                            'data2': range(5)})
+    >>> df1
+       data1 key
+    0      0   b
+    1      1   b
+    2      2   a
+    3      3   c
+    4      4   a
+    5      5   b
+    
+    >>> df2
+       data2 key
+    0      0   a
+    1      1   b
+    2      2   a
+    3      3   b
+    4      4   d
+
+
+    # Many-to-many merge to get the Cartesian product
+    >>> pd.merge(df1, df2, on='key', how='left')
+
+        data1 key  data2
+    0       0   b    1.0
+    1       0   b    3.0
+    2       1   b    1.0
+    3       1   b    3.0
+    4       2   a    0.0
+    5       2   a    2.0
+    6       3   c    NaN
+    7       4   a    0.0
+    8       4   a    2.0
+    9       5   b    1.0
+    10      5   b    3.0
+
+
+
+- Merging with Multiple Keys
+
+    >>> left = pd.DataFrame({'key1': ['foo', 'foo', 'bar'],
+                             'key2': ['one', 'two', 'one'],
+                             'lval': [1, 2, 3]})
+
+    >>> right = pd.DataFrame({'key1': ['foo', 'foo', 'bar', 'bar'],
+                              'key2': ['one', 'one', 'one', 'two'],
+                              'rval': [4, 5, 6, 7]})
+
+    # Merge on composite key
+    >>> pd.merge(left, right, on=['key1', 'key2'], how='outer')
+ 
+      key1 key2  lval  rval
+    0  foo  one   1.0   4.0
+    1  foo  one   1.0   5.0
+    2  foo  two   2.0   NaN
+    3  bar  one   3.0   6.0
+    4  bar  two   NaN   7.0
+
+
+    # Merge also has the 'suffixes' option to specify strings to append to overlaping names
+    >>> pd.merge(left, right, on='key1')
+
+      key1 key2_x  lval key2_y  rval
+    0  foo    one     1    one     4
+    1  foo    one     1    one     5
+    2  foo    two     2    one     4
+    3  foo    two     2    one     5
+    4  bar    one     3    one     6
+    5  bar    one     3    two     7
+    
+    >>> pd.merge(left, right, on='key1', suffixes=('_left', '_right'))
+
+      key1 key2_left  lval key2_right  rval
+    0  foo       one     1        one     4
+    1  foo       one     1        one     5
+    2  foo       two     2        one     4
+    3  foo       two     2        one     5
+    4  bar       one     3        one     6
+    5  bar       one     3        two     7
 
 
 
