@@ -642,7 +642,6 @@ CHAPTER 08 - DATA WRANGLING
 
     Concatenating (aka 'binding' or 'stacking') is another popular type of data combination.
 
-
     # Numpy array concatentation
     >>> arr = np.arange(12).reshape((3, 4))
     >>> arr
@@ -656,6 +655,122 @@ CHAPTER 08 - DATA WRANGLING
            [ 8,  9, 10, 11,  8,  9, 10, 11]])
 
 
+    When concatenating pandas objects, there are a few additional things to consider.
+
+      1. If the objects are indexed differently, should we combine the distinct elements
+           or only the intersection?
+
+      2. Do the concatenated chunks of data need to be identifiable in the resulting object?
+
+      3. Does the concatenation axis contain data that needs to be preserved?  Or should
+           we just discard the default integer labels?
+
+
+
+- The Series 'concat' Function
+
+    # Suppose we have 3 Series with no index overlap
+    >>> s1 = pd.Series([0, 1], index=['a', 'b'])
+    >>> s2 = pd.Series([2, 3, 4], index=['c', 'd', 'e'])
+    >>> s3 = pd.Series([5, 6], index=['f', 'g'])
+
+    # Calling 'concat' with these objects in a list glues together the values and indexes
+    >>> pd.concat([s1, s2, s3])
+
+    a    0
+    b    1
+    c    2
+    d    3
+    e    4
+    f    5
+    g    6
+    dtype: int64
+
+
+    # By default, 'concat' works with 'axis=0', producing another Series.
+    # If we pass 'axis=1' instead, the result will be a DataFrame instead.
+    >>> pd.concat([s1, s2, s3], axis=1)
+
+         0    1    2
+    a  0.0  NaN  NaN
+    b  1.0  NaN  NaN
+    c  NaN  2.0  NaN
+    d  NaN  3.0  NaN
+    e  NaN  4.0  NaN
+    f  NaN  NaN  5.0
+    g  NaN  NaN  6.0
+
+
+    # By default, the column concatenation will produce the outer join of the indexes.
+    # To intersect them instead, can pass join='inner'.
+    >>> pd.concat([s1, s3])
+
+    a    0
+    b    1
+    f    5
+    g    6
+    dtype: int64
+    
+    >>> pd.concat([s1, s4], axis=1)
+
+         0  1
+    a  0.0  0
+    b  1.0  1
+    f  NaN  5
+    g  NaN  6
+    
+    >>> pd.concat([s1, s4], axis=1, join='inner')
+
+       0  1
+    a  0  0
+    b  1  1
+
+
+
+- Special Cases When Concatenating Series
+
+    # Specify the axes to be used on the other axes with the 'join_axes' argument
+    >>> pd.concat([s1, s4], axis=1, join_axes=[['a', 'c', 'b', 'e']])
+
+         0    1
+    a  0.0  0.0
+    c  NaN  NaN
+    b  1.0  1.0
+    e  NaN  NaN
+
+
+    # Create a hierarchical index on the concatenation axis with the 'keys' argument
+    >>> result = pd.concat([s1, s1, s3], keys=['one', 'two', 'three'])
+    >>> result
+ 
+    one    a    0
+           b    1
+    two    a    0
+           b    1
+    three  f    5
+           g    6
+    dtype: int64
+    
+    >>> result.unstack()
+
+             a    b    f    g
+    one    0.0  1.0  NaN  NaN
+    two    0.0  1.0  NaN  NaN
+    three  NaN  NaN  5.0  6.0
+
+
+    # When concatenating along the column axis, the 'keys' become DataFrame column headers
+    >>> pd.concat([s1, s2, s3], axis=1, keys=['one', 'two', 'three'])
+
+       one  two  three
+    a  0.0  NaN    NaN
+    b  1.0  NaN    NaN
+    c  NaN  2.0    NaN
+    d  NaN  3.0    NaN
+    e  NaN  4.0    NaN
+    f  NaN  NaN    5.0
+    g  NaN  NaN    6.0
+    
 
 
 - List of 'concat' Function Arguments
