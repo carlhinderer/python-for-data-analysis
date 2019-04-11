@@ -863,6 +863,90 @@ CHAPTER 08 - DATA WRANGLING
 
 - Combining Data With Overlap
 
+    There is another data combination situation that can't be expressed as either a merge or
+      concatenation operation.  You may have 2 datasets whose indexes overlap in full or in
+      part:
+
+    >>> a = pd.Series([np.nan, 2.5, 0.0, 3.5, 4.5, np.nan],
+                      index=['f', 'e', 'd', 'c', 'b', 'a'])
+
+    >>> b = pd.Series([0., np.nan, 2., np.nan, np.nan, 5.],
+                      index=['a', 'b', 'c', 'd', 'e', 'f'])
+
+    >>> a
+
+    f    NaN
+    e    2.5
+    d    0.0
+    c    3.5
+    b    4.5
+    a    NaN
+    dtype: float64
+    
+    >>> b
+
+    a    0.0
+    b    NaN
+    c    2.0
+    d    NaN
+    e    NaN
+    f    5.0
+    dtype: float64
+    
+    >>> np.where(pd.isnull(a), b, a)
+    array([ 0. ,  2.5,  0. ,  3.5,  4.5,  5. ])
+
+
+    # Series has a 'combine_first' method, which performs the equivalent of this operation
+    #   along with pandas's usual data alignment logic
+    >>> b.combine_first(a)
+
+    a    0.0
+    b    4.5
+    c    2.0
+    d    0.0
+    e    2.5
+    f    5.0
+    dtype: float64
+
+
+    # DataFrame's 'combine_first' does the same thing column-by-column.  Basically, it 'patches'
+    #   the missing data from the calling object with data from the object passed in.
+    >>> df1 = pd.DataFrame({'a': [1., np.nan, 5., np.nan],
+                            'b': [np.nan, 2., np.nan, 6.],
+                            'c': range(2, 18, 4)})
+
+    >>> df2 = pd.DataFrame({'a': [5., 4., np.nan, 3., 7.],
+                            'b': [np.nan, 3., 4., 6., 8.]})
+    
+    >>> df1
+ 
+         a    b   c
+    0  1.0  NaN   2
+    1  NaN  2.0   6
+    2  5.0  NaN  10
+    3  NaN  6.0  14
+    
+    >>> df2
+    
+         a    b
+    0  5.0  NaN
+    1  4.0  3.0
+    2  NaN  4.0
+    3  3.0  6.0
+    4  7.0  8.0
+    
+    >>> df1.combine_first(df2)
+    
+         a    b     c
+    0  1.0  NaN   2.0
+    1  4.0  2.0   6.0
+    2  5.0  4.0  10.0
+    3  3.0  6.0  14.0
+    4  7.0  8.0   NaN
+
+
+
 - Reshaping With Hierarchical Indexing
 
 - Pivoting 'Long' to 'Wide' Format
