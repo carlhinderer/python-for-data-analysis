@@ -336,11 +336,85 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
 
 - seaborn
 
+    1. matplotlib is a fairly low-level tool.  You assemble a plot from its base components.
+
+    2. pandas has built-in methods to create visualizations from DataFrame and Series objects.
+
+    3. 'seaborn' is a popular statistical graphics library that simplifies creating many common
+         visualization types.  Note that importing seaborn will change many default matplotlib
+         asthetics, so some people just import it and don't do anything else with it.
+
+
+
 - Line Plots
+
+    # Series and DataFrame each have a 'plot' method for making some basic plot types.
+    #   By default, it creates line plots, with the index on the x-axis and the
+    #   series data on the y-axis.
+    >>> s = pd.Series(np.random.randn(10).cumsum(), index=np.arange(0, 100, 10))
+    >>> s.plot()
+
+
+    # DataFrames plot each column in a separate line
+    >>> df = pd.DataFrame(np.random.randn(10, 4).cumsum(0),
+                          columns=['A', 'B', 'C', 'D'],
+                          index=np.arange(0, 100, 10))
+    >>> df.plot()
+
+
 
 - List of Series.plot Method Arguments
 
+    Argument	    Description
+    --------------------------------------------------------------------------------
+    label	        Label for plot legend
+
+    ax	            matplotlib subplot object to plot on; if nothing passed, uses active 
+                      matplotlib subplot
+
+    style	        Style string, like 'ko--', to be passed to matplotlib
+
+    alpha	        The plot fill opacity (from 0 to 1)
+
+    kind	        Can be 'area', 'bar', 'barh', 'density', 'hist', 'kde', 'line', 'pie'
+
+    logy	        Use logarithmic scaling on the y-axis
+
+    use_index	    Use the object index for tick labels
+
+    rot 	        Rotation of tick labels (0 through 360)
+
+    xticks	        Values to use for x-axis ticks
+
+    yticks	        Values to use for y-axis ticks
+
+    xlim	        x-axis limits (e.g., [0, 10])
+
+    ylim	        y-axis limits
+
+    grid	        Display axis grid (on by default)
+
+
+
 - List of DataFrame-specific plot Arguments
+
+    Argument	    Description
+    --------------------------------------------------------------------------------
+    subplots	    Plot each DataFrame column in a separate subplot
+
+    sharex	        If subplots=True, share the same x-axis, linking ticks and limits
+
+    sharey	        If subplots=True, share the same y-axis
+
+    figsize	        Size of figure to create as tuple
+
+    title	        Plot title as string
+
+    legend	        Add a subplot legend (True by default)
+
+    sort_columns	Plot columns in alphabetical order; by default uses existing column order
+
+
 
 - Bar Plots
 
