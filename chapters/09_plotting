@@ -283,7 +283,56 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
 
 - Saving Plots to File
 
+    # Save a plot (file type is inferred from extension)
+    >>> plt.savefig('figpath.svg')
+
+    # Save, with dpi resolution and whitespace around plot set
+    >>> plt.savefig('figpath.png', dpi=400, bbox_inches='tight')
+
+    # We don't have to write to disk, we can write to any file-like object
+    >>> from io import BytesIO
+    >>> buffer = BytesIO()
+    >>> plt.savefig(buffer)
+    >>> plot_data = buffer.getvalue()
+
+
+
+- List of 'Figure.savefig' Options
+
+    Argument	    Description
+    -------------------------------------------------------------------------------------------
+    fname	        String containing a filepath or a Python file-like object. The figure 
+                      format is inferred from the file extension (e.g., .pdf for PDF or .png for PNG)
+
+    dpi	            The figure resolution in dots per inch; defaults to 100 out of the box but 
+                      can be configured
+
+    facecolor, edgecolor	The color of the figure background outside of the subplots; 'w' (white), 
+                              by default
+
+    format	        The explicit file format to use ('png', 'pdf', 'svg', 'ps', 'eps', ...)
+
+    bbox_inches	    The portion of the figure to save; if 'tight' is passed, will attempt to trim 
+                      the empty space around the figure
+
+
+
 - matplotlib Configuraition
+
+    All of matplotlib's default color schemes and default behavior can be customized via an 
+      extensive set of global parameters.  Many of these parameters can be configured 
+      programatically with the 'rc' method.
+
+    # Set the global default figure size to be 10x10
+    >>> plt.rc('figure', figsize=(10, 10))
+
+    # Update the default font
+    >>> font_options = {'family': 'monospace', 
+                        'weight': 'bold',
+                        'size': 'small'}
+    >>> plt.rc('font', **font_options)
+
+
 
 - seaborn
 
