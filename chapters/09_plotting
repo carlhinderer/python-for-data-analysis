@@ -154,3 +154,90 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
     # Uses steps-post style
     >>> plt.plot(data, 'k-', drawstyle='steps-post', label='steps-post')
     >>> plt.legend(loc='best')
+
+
+
+- Ticks, Labels, and Legends
+
+    For most kinds of plot decorations, there are 2 main ways to do things:
+      1. Use the procedural pyplot interface
+      2. Use the more OO native matplotlib API
+
+    The 'pyplot' interface is designed for interactive use.  It consists of methods like 'xlim',
+      'xticks', and 'xticklabels'.  These control the plot range, tick locations, and tick labels,
+      respectively.   These methods can be called in 2 ways:
+
+      1. If called without an argument(ie plt.xlim()), they'll return the current value.
+      2. If called with an argument value(ie plt.xlim([0, 10])), they'll set the current value.
+
+    All such methods act on the active (or most recently created) AxesSubplot.
+
+
+
+- Setting the Title, Axis Labels, Ticks, and TickLabels
+
+    # Create a plot of a random walk
+    >>> fig = plt.figure()
+    >>> ax = fig.add_subplot(1, 1, 1)
+    >>> ax.plot(np.random.randn(1000).cumsum())
+
+    # Set x-axis ticks
+    >>> ax.set_xticks([0, 250, 500, 750, 1000])
+
+    # Set x-axis tick labels
+    >>> ax.set_xticklabels(['one', 'two', 'three', 'four', 'five'], rotation = 30, fontsize='small')
+
+    # Set plot title
+    >>> ax.set_title('My first matplotlib plot')
+
+    # Set label of x-axis
+    >>> ax.set_xlabel('Stages')
+
+
+    # The axes class also has a 'set' method that allows batch setting of plot properties
+    >>> props = {
+            'title': 'My first matplotlib plot',
+            'xlabel': 'Stages'
+        }
+    >>> ax.set(**props)
+
+
+
+- Adding Legends
+
+    # Add labels to plots
+    >>> from numpy.random import randn
+    >>> fig = plt.figure()
+    >>> ax = fig.add_subplot(1, 1, 1)
+    >>> ax.plot(randn(1000).cumsum(), 'k', label='one')
+    >>> ax.plot(randn(1000).cumsum(), 'k--', label='two')
+    >>> ax.plot(randn(1000).cumsum(), 'k.', label='three')
+
+    # Now, add the legend
+    >>> ax.legend(loc='best')
+
+
+
+- Annotations and Drawing on a Subplot
+
+    
+
+- Saving Plots to File
+
+- matplotlib Configuraition
+
+- seaborn
+
+- Line Plots
+
+- List of Series.plot Method Arguments
+
+- List of DataFrame-specific plot Arguments
+
+- Bar Plots
+
+- Histograms and Density Plots
+
+- Scatter or Point Plots
+
+- Facet Grids and Categorical Data
