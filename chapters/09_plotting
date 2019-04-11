@@ -1,0 +1,28 @@
+------------------------------------------------------
+CHAPTER 09 - PLOTTING AND VISUALIZATION
+------------------------------------------------------
+
+- matplotlib
+
+    matplotlib is a desktop plotting package designed for creating (mostly 2D) 
+      publication-quality plots.  The project was started in 2002 by John Hunter to 
+      enable MATLAB-like plotting in Python.
+
+    Plots can be exported to all the common vector and raster graphics formats
+      (PDF, SVG, JPG, PNG, BMP, GIF, etc.)
+
+
+    # Standard import convention
+    >>> import matplotlib.pyplot as plt
+
+    # IPython command for interactive plots
+    >>> %matplotlib
+
+    # Jupyter command for interactive plots
+    >>> %matplotlib inline
+
+
+
+- Simple Line Plot
+
+    
