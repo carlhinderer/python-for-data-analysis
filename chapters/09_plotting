@@ -19,10 +19,83 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
     >>> %matplotlib
 
     # Jupyter command for interactive plots
+    >>> %matplotlib notebook
+
+    # Or
     >>> %matplotlib inline
 
 
 
 - Simple Line Plot
 
-    
+    # Plot a straight line
+    >>> import numpy as np
+    >>> data = np.arange(10)
+    >>> plt.plot(data)
+
+
+
+- Figures and Subplots
+
+    Plots in matplotlib reside within a 'Figure' object.  Any number of subplots
+      can be added to a Figure.
+
+    # Create a figure
+    >>> fig = plt.figure()
+
+    # Make the figure 2x2, and add this subplot in the first position
+    >>> ax1 = fig.add_subplot(2, 2, 1)
+
+    # Create subplots in the 2nd and 3rd positions
+    >>> ax2 = fig.add_subplot(2, 2, 2)
+    >>> ax3 = fig.add_subplot(2, 2, 3)
+
+
+    # Note that in Jupyter notebooks, the plots are reset after each cell is evaluated,
+    #   so all of the commands for a figure must be in the same cell.
+
+
+    # When a command like plt.plot() is issued, matplot draws on the last figure and
+    #   subplot used, to the figure and subplot creation is hidden.  This will plot
+    #   a line in the 3rd subplot.  Note that the 'k--' is a style parameter that will
+    #   cause a dashed black line to be used.
+    >>> plt.plot(np.random.randn(50).cumsum(), 'k--'')
+
+
+    # The 'fig.add_subplot' returns an 'AxesSubplot' object that can be directly plotted on.
+    >>> ax1.hist(np.random.randn(100), bins=20, color='k', alpha=0.3)
+    >>> ax2.scatter(np.arange(30), np.arange(30) + 3 * np.random.randn(30))
+
+
+    # The 'plt.subplots' method creates a new figure and returns a numpy array of the
+    #   created subplot objects.
+    >>> fig, axes = plt.subplots(2, 3)
+    >>> axes
+
+    array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f435346c668>,
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7f435338c780>,
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7f43533c37f0>],
+       [    <matplotlib.axes._subplots.AxesSubplot object at 0x7f435337d8d0>,
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7f4353336908>,
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7f43532ea400>]], 
+            dtype=object)
+
+
+
+- List of 'pyplot.subplots' Options
+
+    Argument	    Description
+    nrows	        Number of rows of subplots
+
+    ncols	        Number of columns of subplots
+
+    sharex	        All subplots should use the same x-axis ticks (adjusting the 
+                      xlim will affect all subplots)
+
+    sharey	        All subplots should use the same y-axis ticks (adjusting the 
+                      ylim will affect all subplots)
+
+    subplot_kw	    Dict of keywords passed to add_subplot call used to create each subplot
+
+    **fig_kw	    Additional keywords to subplots are used when creating the figure, such as
+                      plt.subplots(2, 2, figsize=(8, 6))
