@@ -949,6 +949,57 @@ CHAPTER 08 - DATA WRANGLING
 
 - Reshaping With Hierarchical Indexing
 
+    Hierarchical indexing provides a consistent way to rearrange data in a DataFrame.
+      There are 2 primary actions:
+
+      1. 'stack' = rotates (or 'pivots') from the columns in the data to the rows
+
+      2. 'unstack' = pivots from the rows to the columns
+
+
+    # Consider a small DataFrame with string arrays as row and column indexes
+    data = pd.DataFrame(np.arange(6).reshape((2, 3)),
+                        index=pd.Index(['Ohio', 'Colorado'], name='state'),
+                        columns=pd.Index(['one', 'two', 'three'], name='number'))
+
+    >>> data
+
+    number    one  two  three
+    state                    
+    Ohio        0    1      2
+    Colorado    3    4      5
+
+
+    # Using the 'stack' method on this data pivots the columns into the rows, 
+    #   producing a Series
+    >>> result = data.stack()
+    >>> result
+
+    state     number
+    Ohio      one       0
+              two       1
+              three     2
+    Colorado  one       3
+              two       4
+              three     5
+    dtype: int64
+
+
+    # From a hierarchically indexed Series, you can rearrange the data back into a 
+    #   DataFrame with 'unstack'
+    >>> result.unstack()
+
+    number    one  two  three
+    state                    
+    Ohio        0    1      2
+    Colorado    3    4      5    
+
+
+
+- Advanced Stacking and Unstacking
+
+
+
 - Pivoting 'Long' to 'Wide' Format
 
 - Pivoting 'Wide' to 'Long' Format

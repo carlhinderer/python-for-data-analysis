@@ -99,3 +99,58 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
 
     **fig_kw	    Additional keywords to subplots are used when creating the figure, such as
                       plt.subplots(2, 2, figsize=(8, 6))
+
+
+
+- Adjusting the Spacing Around Subplots
+
+    By default, matplotlib leaves a certain amount of padding around the outside of the subplots
+      and spacing between subplots.  This spacing is all specified relative to the height and
+      width of the plot, so that if the plot is resized, it will dynamically adjust itself.
+
+
+    # When called as a top-level function, the 'subplots_adjust' method changes padding and
+    #   spacing for all plots
+    >>> subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=None)
+
+
+    # 'subplots_adjust' can also be called at the figure- or subplot-level
+    >>> fit, axes = plt.subplots(2, 2, sharex=True, sharey=True)
+
+    >>> for i in range(2):
+            for j in range(2): 
+                axes[i, j].hist(np.random.randn(500), bins=50, color='k', alpha=0.5)
+
+    >>> plt.subplots_adjust(wspace=0, hspace=0)
+
+
+
+- Colors, Markers, and Line Styles
+
+    Matplotlib's main 'plot' function accepts arrays of x and y coordinates and optionally a
+      string abbreviation indicating color and line style.
+
+    # Plot x vs y with green dashes
+    >>> ax.plot(x, y, 'g--')
+
+    # More explicitly (Note colors can also be hex values)
+    >>> ax.plot(x, y, linestyle='--', color='g')
+
+
+    # Plot x vs y with black dashes and circles for markers
+    >>> plt.plot(np.random.randn(30).cumsum(), 'ko--')
+
+    # More explicity
+    >>> plt.plot(np.random.nrandn(30).cumsum(), color='k', linestyle='dashed', marker='o')
+
+
+    # By default, subsequent points in line plots are linearly interpolated.  To change this,
+    #   the 'drawstyle' argument can be used.
+    >>> data = np.random.randn(30).cumsum()
+
+    # Uses linear interpolation
+    >>> plt.plot(data, 'k--', label='Default')
+
+    # Uses steps-post style
+    >>> plt.plot(data, 'k-', drawstyle='steps-post', label='steps-post')
+    >>> plt.legend(loc='best')
