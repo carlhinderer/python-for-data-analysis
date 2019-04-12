@@ -521,7 +521,37 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
 
 
 
-- Histograms and Density Plots
+- Histograms
+
+    A histogram is a bar plot that gives a discretized display of value frequency.  The 
+      data points are split into discrete, evenly spaced bins, and the number of data points
+      in each bin is plotted.
+
+    # Plot a histogram of the tip percentages
+    >>> tips['tip_pct'].plot.hist(bins=50)
+
+
+
+- Density Plots
+
+    A 'density plot' is formed by computing an estimate of a continuous probability 
+      distribution that might have generated the observed data.  The usual procedure is to 
+      approximate this distribution as a mixture of “kernels” — that is, simpler distributions 
+      like the normal distribution. Thus, density plots are also known as kernel density estimate 
+      (KDE) plots. Using plot.kde makes a density plot using the conventional mixture-of-normals 
+      estimate.
+
+    >>> tips['tip_pct'].plot.density()
+
+
+    Seaborn makes histograms and density plots even easier through its distplot method, which can 
+      plot both a histogram and a continuous density estimate simultaneously. As an example, consider 
+      a bimodal distribution consisting of draws from two different standard normal distributions.
+
+    >>> comp1 = np.random.normal(0, 1, size=200)
+    >>> comp2 = np.random.normal(10, 2, size=200)
+    >>> values = pd.Series(np.concatenate([comp1, comp2]))
+    >>> sns.distplot(values, bins=100, color='k')
 
 - Scatter or Point Plots
 
