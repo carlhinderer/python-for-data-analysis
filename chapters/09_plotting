@@ -553,6 +553,58 @@ CHAPTER 09 - PLOTTING AND VISUALIZATION
     >>> values = pd.Series(np.concatenate([comp1, comp2]))
     >>> sns.distplot(values, bins=100, color='k')
 
+
+
 - Scatter or Point Plots
 
+    'Point plots' (or 'scatter plots') can be a useful way of examining the relationship between two 
+      1D data series.
+
+    # Load the 'macrodata' dataset from statsmodels and select features
+    >>> macro = pd.read_csv('examples/macrodata.csv')
+    >>> data = macro[['cpi', 'm1', 'tbilrate', 'unemp']]
+
+    # Compute log differences
+    >>> trans_data = np.log(data).diff().dropna()
+    >>> trans_data[-5:]
+
+              cpi        m1  tbilrate     unemp
+    198 -0.007904  0.045361 -0.396881  0.105361
+    199 -0.021979  0.066753 -2.277267  0.139762
+    200  0.002340  0.010286  0.606136  0.160343
+    201  0.008419  0.037461 -0.200671  0.127339
+    202  0.008894  0.012202 -0.405465  0.042560
+
+    # seaborn’s 'regplot' method makes a scatter plot and fits a linear regression line
+    >>> sns.regplot('m1', 'unemp', data=trans_data)
+    >>> plt.title('Changes in log %s versus log %s' % ('m1', 'unemp'))
+
+
+
+- Pairs Plots
+
+    In exploratory data analysis, it’s helpful to be able to look at all the scatter plots 
+      among a group of variables; this is known as a 'pairs plot' or 'scatter plot matrix'. Making 
+      such a plot from scratch is a bit of work, so seaborn has a convenient pairplot function, 
+      which supports placing histograms or density estimates of each variable along the diagonal.
+
+    >>> sns.pairplot(trans_data, diag_kind='kde', plot_kws={'alpha': 0.2})
+
+
+
 - Facet Grids and Categorical Data
+
+    One way to visualize data with many categorical variables is to use a facet grid. The seaborn
+      function 'factorplot' simplifies making many kinds of faceted plots.
+
+    >>> sns.factorplot(x='day', y='tip_pct', hue='time', col='smoker', kind='bar', 
+                       data=tips[tips.tip_pct < 1])
+
+
+    # Expand the facet grid by adding one row per time value
+    >>> sns.factorplot(x='day', y='tip_pct', row='time', col='smoker', kind='bar', 
+                       data=tips[tips.tip_pct < 1])
+
+
+    # Create a 'factorplot' box plot
+    >>> sns.factorplot(x='tip_pct', y='day', kind='box', data=tips[tips.tip_pct < 0.5])
