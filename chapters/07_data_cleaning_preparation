@@ -69,7 +69,7 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
 
     >>> from numpy import nan as NA
     >>> data = pd.Series([1, NA, 3.5, NA, 7])
-    >>> data.drop_na()
+    >>> data.dropna()
 
     0    1.0
     2    3.5
@@ -87,7 +87,7 @@ CHAPTER 07 - DATA CLEANING AND PREPARATION
       columns that are all NA or those containing any NAs.  By default, 'dropna'
       drops any row containing a missing value.
 
-    >>> data = data = pd.DataFrame([[1., 6.5, 3.], [1., NA, NA],
+    >>> data = pd.DataFrame([[1., 6.5, 3.], [1., NA, NA],
                                     [NA, NA, NA], [NA, 6.5, 3.]])
 
     >>> cleaned = data.dropna()
