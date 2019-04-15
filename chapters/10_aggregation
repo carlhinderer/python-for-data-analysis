@@ -120,7 +120,51 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 
 
+- Using DataFrame Columns as Grouping Keys
+
+    Frequently, the grouping information is found in the same DataFrame as the data you want
+      to work on.  In that case, you can pass column names as group keys.
+
+    >>> df.groupby('key1').mean()
+
+             data1     data2
+    key1                    
+    a     0.746672  0.910916
+    b    -0.537585  0.525384
+    
+    >>> df.groupby(['key1', 'key2']).mean()
+    Out[22]: 
+                  data1     data2
+    key1 key2                    
+    a    one   0.880536  1.319920
+         two   0.478943  0.092908
+    b    one  -0.519439  0.281746
+         two  -0.555730  0.769023
+
+
+    In the first case above, 'df.groupby('key1').mean()' did not include 'key2' in the
+      grouped data.  This is because 'key2' is not numeric data, so it is said to be a
+      'nuissance column', and is therefore excluded from the result.
+
+
+
+- Getting Group Sizes
+
+    # The 'size' method is used to get group sizes
+    >>> df.groupby(['key1', 'key2']).size()
+
+    key1  key2
+    a     one     2
+          two     1
+    b     one     1
+          two     1
+    dtype: int64
+
+
+
 - Iterating Over Groups
+
+    
 
 - Selecting a Column or Subset of Columns
 
