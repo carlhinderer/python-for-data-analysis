@@ -1125,7 +1125,7 @@ CHAPTER 08 - DATA WRANGLING
 
 
 
-- Pivoting 'Long' to 'Wide' Format
+- Long Format (aka Stacked Format)
 
     A common way to store multiple time series in databases and CSV files is in 
       'long format' (aka 'stacked format').  
@@ -1173,6 +1173,94 @@ CHAPTER 08 - DATA WRANGLING
     8 1959-09-30    unemp     5.300
     9 1959-12-31  realgdp  2785.204
 
+
+
+- Pivoting 'Long' to 'Wide' Format
+
+    Data is frequently stored in long format in relational databases.  To make it easy
+      to work with, it's often easier to convert back into a DataFrame after pulling it
+      out of the database.  The DataFrame's 'pivot' method does this transformation.
+
+
+    # The parameters are (row_index, column_index, column_to_fill_dataframe)
+    >>> pivoted = ldata.pivot('date', 'item', 'value')
+    >>> pivoted[:10]
+
+    item        infl    realgdp  unemp
+    date                              
+    1959-03-31  0.00   2710.349    5.8
+    1959-06-30  2.34   2778.801    5.1
+    1959-09-30  2.74   2775.488    5.3
+    1959-12-31  0.27   2785.204    5.6
+    1960-03-31  2.31   2847.699    5.2
+    1960-06-30  0.14   2834.390    5.2
+    1960-09-30  2.70   2839.022    5.6
+    1960-12-31  1.21   2802.616    6.3
+    1961-03-31 -0.40   2819.264    6.8
+    1961-06-30  1.47   2872.005    7.0
+
+
+    # If you have 2 columns that you want to reshape at the same time, you can omit
+    #   the 3rd parameter to obtain a DataFrame with hierarchical columns.
+    >>> ldata['value2'] = np.random.randn(len(ldata))
+    >>> ldata[:10]
+
+            date     item     value    value2
+    0 1959-03-31  realgdp  2710.349  0.523772
+    1 1959-03-31     infl     0.000  0.000940
+    2 1959-03-31    unemp     5.800  1.343810
+    3 1959-06-30  realgdp  2778.801 -0.713544
+    4 1959-06-30     infl     2.340 -0.831154
+    5 1959-06-30    unemp     5.100 -2.370232
+    6 1959-09-30  realgdp  2775.488 -1.860761
+    7 1959-09-30     infl     2.740 -0.860757
+    8 1959-09-30    unemp     5.300  0.560145
+    9 1959-12-31  realgdp  2785.204 -1.265934 
+
+
+    >>> pivoted = ldata.pivot('date', 'item')
+    >>> pivoted[:5]
+
+               value                    value2                    
+    item        infl   realgdp unemp      infl   realgdp     unemp
+    date                                                          
+    1959-03-31  0.00  2710.349   5.8  0.000940  0.523772  1.343810
+    1959-06-30  2.34  2778.801   5.1 -0.831154 -0.713544 -2.370232
+    1959-09-30  2.74  2775.488   5.3 -0.860757 -1.860761  0.560145
+    1959-12-31  0.27  2785.204   5.6  0.119827 -1.265934 -1.063512
+    1960-03-31  2.31  2847.699   5.2 -2.359419  0.332883 -0.199543
+    
+    >>> pivoted['value'][:5]
+
+    item        infl   realgdp  unemp
+    date                             
+    1959-03-31  0.00  2710.349    5.8
+    1959-06-30  2.34  2778.801    5.1
+    1959-09-30  2.74  2775.488    5.3
+    1959-12-31  0.27  2785.204    5.6
+    1960-03-31  2.31  2847.699    5.2
+
+
+
+- Pivoting vs Unstacking
+
+    Note that 'pivot' is equivalent to creating a hierarchical index using 'set_index'
+      followed by a call to 'unstack'.
+
+
+    >>> unstacked = ldata.set_index(['date', 'item']).unstack('item')
+    >>> unstacked[:7]
+    
+               value                    value2                    
+    item        infl   realgdp unemp      infl   realgdp     unemp
+    date                                                          
+    1959-03-31  0.00  2710.349   5.8  0.000940  0.523772  1.343810
+    1959-06-30  2.34  2778.801   5.1 -0.831154 -0.713544 -2.370232
+    1959-09-30  2.74  2775.488   5.3 -0.860757 -1.860761  0.560145
+    1959-12-31  0.27  2785.204   5.6  0.119827 -1.265934 -1.063512
+    1960-03-31  2.31  2847.699   5.2 -2.359419  0.332883 -0.199543
+    1960-06-30  0.14  2834.390   5.2 -0.970736 -1.541996 -1.307030
+    1960-09-30  2.70  2839.022   5.6  0.377984  0.286350 -0.753887
 
 
 
