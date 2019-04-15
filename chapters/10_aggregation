@@ -43,6 +43,83 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
                      15  30  45
 
 
+
+- Grouping Keys
+
+    Each grouping key can take many forms, and the keys don't all have to be the same
+      type.  Different types of keys include:
+
+      1. A list or array of values the same length as the axis being grouped
+      2. A value indicating a column name in a DataFrame
+      3. A dict or Series giving a correspondence between the values on the axis being grouped
+      4. A function to be invoked on the axis index or the individual labels in the index
+
+
+    # Create a DataFrame
+    >>> df = pd.DataFrame({'key1' : ['a', 'a', 'b', 'b', 'a'],
+                           'key2' : ['one', 'two', 'one', 'two', 'one'],
+                           'data1' : np.random.randn(5),
+                           'data2' : np.random.randn(5)})
+    >>> df
+
+          data1     data2 key1 key2
+    0 -0.204708  1.393406    a  one
+    1  0.478943  0.092908    a  two
+    2 -0.519439  0.281746    b  one
+    3 -0.555730  0.769023    b  two
+    4  1.965781  1.246435    a  one
+
+
+    # Suppose we want to compute the mean of the 'data1' column using the labels from 'key1'
+    >>> grouped = df['data1'].groupby(df['key1'])
+    >>> grouped
+    <pandas.core.groupby.SeriesGroupBy object at 0x7f85008d0400>
+
+    >>> grouped.mean()
+
+    key1
+    a    0.746672
+    b   -0.537585
+    Name: data1, dtype: float64
+
+
+    # We can also pass multiple arrays as keys
+    >>> means = df['data1'].groupby([df['key1'], df['key2']]).mean()
+    >>> means
+
+    key1  key2
+    a     one     0.880536
+          two     0.478943
+    b     one    -0.519439
+          two    -0.555730
+    Name: data1, dtype: float64
+
+    >>> means.unstack()
+
+    key2       one       two
+    key1                    
+    a     0.880536  0.478943
+    b    -0.519439 -0.555730
+
+
+
+- Using numpy Arrays as Grouping Keys
+
+    # Create numpy arrays
+    >>> states = np.array(['Ohio', 'California', 'California', 'Ohio', 'Ohio'])
+    >>> years = np.array([2005, 2005, 2006, 2005, 2006])
+    
+    # Use numpy arrays as grouping keys
+    >>> df['data1'].groupby([states, years]).mean()
+
+    California  2005    0.478943
+                2006   -0.519439
+    Ohio        2005   -0.380219
+                2006    1.965781
+    Name: data1, dtype: float64
+
+
+
 - Iterating Over Groups
 
 - Selecting a Column or Subset of Columns
