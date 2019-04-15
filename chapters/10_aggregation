@@ -164,7 +164,65 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Iterating Over Groups
 
+    The 'GroupBy' object is iterable, generating a sequence of 2-tuples containing the 
+      group name along with the chunk of data.
+
+    >>> for name, group in df.groupby('key1'):
+            print(name)
+            print(group)
+
+    a
+          data1     data2 key1 key2
+    0 -0.204708  1.393406    a  one
+    1  0.478943  0.092908    a  two
+    4  1.965781  1.246435    a  one
+
+    b
+          data1     data2 key1 key2
+    2 -0.519439  0.281746    b  one
+    3 -0.555730  0.769023    b  two
+
+
+    In the case of multiple keys, the first element in the tuple will be a tuple of key
+      values.
+
+    >>> for (k1, k2), group in df.groupby(['key1', 'key2']):
+            print((k1, k2))
+            print(group)
+
+    ('a', 'one')
+          data1     data2 key1 key2
+    0 -0.204708  1.393406    a  one
+    4  1.965781  1.246435    a  one
+
+    ('a', 'two')
+          data1     data2 key1 key2
+    1  0.478943  0.092908    a  two
+
+    ('b', 'one')
+          data1     data2 key1 key2
+    2 -0.519439  0.281746    b  one
+
+    ('b', 'two')
+         data1     data2 key1 key2
+    3 -0.55573  0.769023    b  two
+
+
+
+- Group Iteration Patterns
+
+    # Compute a dict of data pieces as a one-liner
+    >>> pieces = dict(list(df.groupby('key1')))
+    >>> pieces['b']
+
+          data1     data2 key1 key2
+    2 -0.519439  0.281746    b  one
+    3 -0.555730  0.769023    b  two
+
+
     
+
+
 
 - Selecting a Column or Subset of Columns
 
