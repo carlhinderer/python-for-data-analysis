@@ -20,6 +20,7 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
       key  | A   B   C   A   B   C   A   B   C
       data | 0   5  10   5  10  15  10  15  20 
+
                           |
                           |    SPLIT
                           |
@@ -27,6 +28,7 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
          A   A   A       B   B   B       C   C   C
          0   5  10       5  10  15      10  15  20
+
                           |
                           |    APPLY
                           |
@@ -558,7 +560,78 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 
 
+- Advanced Multiple Function Application
+
+    # As before, a list of tuples with custom names can be passed
+    >>> ftuples = [('Durchschnitt', 'mean'), ('Abweichung', np.var)]
+    >>> grouped['tip_pct', 'total_bill'].agg(ftuples)
+ 
+                     tip_pct              total_bill            
+                Durchschnitt Abweichung Durchschnitt  Abweichung
+    day  smoker                                                 
+    Fri  No         0.151650   0.000791    18.420000   25.596333
+         Yes        0.174783   0.002631    16.813333   82.562438
+    Sat  No         0.158048   0.001581    19.661778   79.908965
+         Yes        0.147906   0.003767    21.276667  101.387535
+    Sun  No         0.160113   0.001793    20.506667   66.099980
+         Yes        0.187250   0.023757    24.120000  109.046044
+    Thur No         0.160298   0.001503    17.113111   59.625081
+         Yes        0.163863   0.001551    19.190588   69.808518
+
+
+    # If we want to apply different functions to one or more of the columns, we can
+    #   pass a dict to 'agg' that contains a mapping of column names to any of the
+    #   function specifications.
+    >>> grouped.agg({'tip' : np.max, 'size' : 'sum'})
+
+                   tip  size
+    day  smoker             
+    Fri  No       3.50     9
+         Yes      4.73    31
+    Sat  No       9.00   115
+         Yes     10.00   104
+    Sun  No       6.00   167
+         Yes      6.50    49
+    Thur No       6.70   112
+         Yes      5.00    40
+
+
+    >>> grouped.agg({'tip_pct' : ['min', 'max', 'mean', 'std'], 'size' : 'sum'})
+    
+                  tip_pct                               size
+                      min       max      mean       std  sum
+    day  smoker                                             
+    Fri  No      0.120385  0.187735  0.151650  0.028123    9
+         Yes     0.103555  0.263480  0.174783  0.051293   31
+    Sat  No      0.056797  0.291990  0.158048  0.039767  115
+         Yes     0.035638  0.325733  0.147906  0.061375  104
+    Sun  No      0.059447  0.252672  0.160113  0.042347  167
+         Yes     0.065660  0.710345  0.187250  0.154134   49
+    Thur No      0.072961  0.266312  0.160298  0.038774  112
+         Yes     0.090014  0.241255  0.163863  0.039389   40
+
+
+
 - Returning Aggregated Data Without Row Indexes
+
+    In all examples up until now, the aggregated data comes back with an index, potentially
+      hierarchical, composed from the unique group key combinations.  If we don't want the
+      indexes, we can pass the 'as_index=False' argument to 'groupby'.
+
+
+    tips.groupby(['day', 'smoker'], as_index=False).mean()
+
+        day smoker  total_bill       tip      size   tip_pct
+    0   Fri     No   18.420000  2.812500  2.250000  0.151650
+    1   Fri    Yes   16.813333  2.714000  2.066667  0.174783
+    2   Sat     No   19.661778  3.102889  2.555556  0.158048
+    3   Sat    Yes   21.276667  2.875476  2.476190  0.147906
+    4   Sun     No   20.506667  3.167895  2.929825  0.160113
+    5   Sun    Yes   24.120000  3.516842  2.578947  0.187250
+    6  Thur     No   17.113111  2.673778  2.488889  0.160298
+    7  Thur    Yes   19.190588  3.030000  2.352941  0.163863
+
+    
 
 - Apply: General Split-Apply-Combine
 
