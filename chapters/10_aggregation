@@ -396,7 +396,7 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
     
     # To group by level, pass the level number or name using the 'level' keyword
     >>> hier_df.groupby(level='cty', axis=1).count()
-    
+
     cty  JP  US
     0     2   3
     1     2   3
@@ -407,7 +407,66 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Data Aggregations
 
-- List of Optimized groupby Methods
+    Aggregations refer to any data transformation that produces scalar values from
+      arrays.  Many common aggregations have optimized implementations.
+
+
+    Name           Description
+    ------------------------------------------------------------------------
+    count          Number of non-NA values in the group
+    sum            Sum of non-NA values
+    mean           Mean of non-NA values
+    median         Arithmetic median of non-NA values
+    std, var       Unbiased (n – 1 denominator) standard deviation and variance
+    min, max       Minimum and maximum of non-NA values
+    prod           Product of non-NA values
+    first, last    First and last non-NA values
+
+
+
+- Non-Optimized Aggregations
+
+    We can also use any other method for our aggregations.  For example, we can use the
+      'Series.quantile' method.  Internally, GroupBy efficiently slices up the Series,
+      calls 'piece.quantile(0.9)', then assembles those results together into the
+      result object.
+
+
+    # Use a previous DataFrame
+    >>> df
+    
+          data1     data2 key1 key2
+    0 -0.204708  1.393406    a  one
+    1  0.478943  0.092908    a  two
+    2 -0.519439  0.281746    b  one
+    3 -0.555730  0.769023    b  two
+    4  1.965781  1.246435    a  one
+    
+
+    >>> grouped = df.groupby('key1')
+    >>> grouped['data1'].quantile(0.9)
+
+    key1
+    a    1.668413
+    b   -0.523068
+    Name: data1, dtype: float64
+
+
+
+- User-Defined Aggregations
+
+    # We can pass any function that aggregates an array to the 'agg' method
+    >>> def peak_to_peak(arr):
+            return arr.max() - arr.min()
+
+    >>> grouped.agg(peak_to_peak)
+
+             data1     data2
+    key1                    
+    a     2.170488  1.300498
+    b     0.036292  0.487276
+
+
 
 - Column-Wise and Multiple Function Application
 
