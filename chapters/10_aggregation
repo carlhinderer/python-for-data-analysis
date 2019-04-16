@@ -470,6 +470,94 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Column-Wise and Multiple Function Application
 
+    # Load tipping dataset from earlier examples
+    >>> tips = pd.read_csv('examples/tips.csv')
+
+    # Add tip percentage of total bill
+    >>> tips['tip_pct'] = tips['tip'] / tips['total_bill']
+
+    >>> tips[:6]
+
+       total_bill   tip smoker  day    time  size   tip_pct
+    0       16.99  1.01     No  Sun  Dinner     2  0.059447
+    1       10.34  1.66     No  Sun  Dinner     3  0.160542
+    2       21.01  3.50     No  Sun  Dinner     3  0.166587
+    3       23.68  3.31     No  Sun  Dinner     2  0.139780
+    4       24.59  3.61     No  Sun  Dinner     4  0.146808
+    5       25.29  4.71     No  Sun  Dinner     4  0.186240
+
+
+    Sometimes, we may want to use different aggregation functions on different columns,
+      or multiple aggregation functions at once.
+
+
+    # Group the tips by day and smoker
+    >>> grouped = tips.groupby(['day', 'smoker'])
+    >>> grouped_pct = grouped['tip_pct']
+
+    >>> grouped_pct.agg('mean')
+
+    day   smoker
+    Fri   No        0.151650
+          Yes       0.174783
+    Sat   No        0.158048
+          Yes       0.147906
+    Sun   No        0.160113
+          Yes       0.187250
+    Thur  No        0.160298
+          Yes       0.163863
+    Name: tip_pct, dtype: float64
+
+
+    # Use different functions on different columns
+    >>> grouped_pct.agg([('foo', 'mean'), ('bar', np.std)])
+
+                      foo       bar
+    day  smoker                    
+    Fri  No      0.151650  0.028123
+         Yes     0.174783  0.051293
+    Sat  No      0.158048  0.039767
+         Yes     0.147906  0.061375
+    Sun  No      0.160113  0.042347
+         Yes     0.187250  0.154134
+    Thur No      0.160298  0.038774
+         Yes     0.163863  0.039389
+
+
+    # Use several functions on the same columns, resulting in 
+    #   hierarchical column index
+    >>> functions = ['count', 'mean', 'max']
+    >>> result = grouped['tip_pct', 'total_bill'].agg(functions)
+    >>> result
+
+                tip_pct                     total_bill                  
+                  count      mean       max      count       mean    max
+    day  smoker                                                         
+    Fri  No           4  0.151650  0.187735          4  18.420000  22.75
+         Yes         15  0.174783  0.263480         15  16.813333  40.17
+    Sat  No          45  0.158048  0.291990         45  19.661778  48.33
+         Yes         42  0.147906  0.325733         42  21.276667  50.81
+    Sun  No          57  0.160113  0.252672         57  20.506667  48.17
+         Yes         19  0.187250  0.710345         19  24.120000  45.35
+    Thur No          45  0.160298  0.266312         45  17.113111  41.19
+         Yes         17  0.163863  0.241255         17  19.190588  43.11
+
+
+    >>> result['tip_pct']
+
+                 count      mean       max
+    day  smoker                           
+    Fri  No          4  0.151650  0.187735
+         Yes        15  0.174783  0.263480
+    Sat  No         45  0.158048  0.291990
+         Yes        42  0.147906  0.325733
+    Sun  No         57  0.160113  0.252672
+         Yes        19  0.187250  0.710345
+    Thur No         45  0.160298  0.266312
+         Yes        17  0.163863  0.241255
+
+
+
 - Returning Aggregated Data Without Row Indexes
 
 - Apply: General Split-Apply-Combine
