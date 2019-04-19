@@ -1103,8 +1103,56 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
     2011  0.691931  0.800996  0.859975  1.0
 
 
+    We could also compute inter-column correlations.  Here, we compute the annual correlation
+      between Apple and Microsoft.
+
+    >>> by_year.apply(lambda g: g['AAPL'].corr(g['MSFT']))
+
+    2003    0.480868
+    2004    0.259024
+    2005    0.300093
+    2006    0.161735
+    2007    0.417738
+    2008    0.611901
+    2009    0.432738
+    2010    0.571946
+    2011    0.581987
+    dtype: float64
+
+
 
 - Example - Group-Wise Linear Regression
+
+    We can also use 'groupby' to perform more complex group-wise statistical analysis, as 
+      long as the function returns a pandas object or scalar value.  For example, we can
+      define the following 'regress' function (using 'statsmodels' econometrics library),
+      which executes an Ordinary Least Squares regression on each chunk of data.
+
+    >>> from statsmodels.api import sm
+    >>> def regress(data, yvar, xvars):
+            Y = data[yvar]
+            X = data[xvars]
+            X['intercept'] = 1.
+            result = sm.OLS(Y, X).fit()
+            return result.params
+
+
+    Now, we run a yearly linear regression of 'AAPL' on 'SPX' returns.
+
+    >>> by_year.apply(regress, 'AAPL', ['SPXX'])
+
+               SPX  intercept
+    2003  1.195406   0.000710
+    2004  1.363463   0.004201
+    2005  1.766415   0.003246
+    2006  1.645496   0.000080
+    2007  1.198761   0.003438
+    2008  0.968016  -0.001110
+    2009  0.879103   0.002954
+    2010  1.052608   0.001261
+    2011  0.806605   0.001514
+
+
 
 - Pivot Tables and Cross-Tabulation
 
