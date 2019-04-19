@@ -17,3 +17,55 @@ CHAPTER 11 - TIME SERIES
                              special case of intervals
 
       4. Elapsed Time = each timestamp is a measure relative to a particular start time
+
+
+
+- Python Date and Time Types
+
+    # 'datetime' stores both the date and time down to the microsecond
+    >>> from datetime import datetime
+    >>> now = datetime.now()
+    >>> now
+    datetime.datetime(2017, 10, 17, 13, 34, 33, 597499)
+
+    >>> now.year, now.month, now.day
+    (2017, 10, 17)
+
+
+    # 'timedelta' stores the difference between 2 datetimes
+    >>> delta = datetime(2011, 1, 7) - datetime(2008, 6, 24, 8, 15)
+    >>> delta
+    datetime.timedelta(926, 56700)
+
+    >>> delta.days
+    926
+
+    >> delta.seconds
+    56700
+
+
+    # We can add or subtract a 'timedelta' or multiples of them to a datetime
+    >>> from datetime import timedelta
+    >>> start = datetime(2011, 1, 7)
+    >>> start + timedelta(12)
+    datetime.datetime(2011, 1, 19, 0, 0)
+
+    >>> start - 2 * timedelta(12)
+    datetime.datetime(2010, 12, 14, 0, 0)
+
+
+
+- List of Types in 'datetime' Module
+
+    Type	    Description
+    -----------------------------------------------------------------------------------
+    date	    Store calendar date (year, month, day) using the Gregorian calendar
+
+    time	    Store time of day as hours, minutes, seconds, and microseconds
+
+    datetime	Stores both date and time
+
+    timedelta	Represents the difference between two datetime values 
+                  (as days, seconds, and microseconds)
+
+    tzinfo	    Base type for storing time zone information
