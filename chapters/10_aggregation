@@ -619,7 +619,7 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
       indexes, we can pass the 'as_index=False' argument to 'groupby'.
 
 
-    tips.groupby(['day', 'smoker'], as_index=False).mean()
+    >>> tips.groupby(['day', 'smoker'], as_index=False).mean()
 
         day smoker  total_bill       tip      size   tip_pct
     0   Fri     No   18.420000  2.812500  2.250000  0.151650
@@ -631,9 +631,67 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
     6  Thur     No   17.113111  2.673778  2.488889  0.160298
     7  Thur    Yes   19.190588  3.030000  2.352941  0.163863
 
-    
+
 
 - Apply: General Split-Apply-Combine
+
+    Suppose we're using the tipping dataset, and we want to find the top five 'tip_pct'
+      values by group.  First, we write a function that selects the rows with the largest
+      values in a particular column.
+
+    >>> def top(df, n=5, column='tip_pct'):
+            return df.sort_values(by=column)[-n:]
+
+    >>> top(tips, n=6)
+
+         total_bill   tip smoker  day    time  size   tip_pct
+    109       14.31  4.00    Yes  Sat  Dinner     2  0.279525
+    183       23.17  6.50    Yes  Sun  Dinner     4  0.280535
+    232       11.61  3.39     No  Sat  Dinner     2  0.291990
+    67         3.07  1.00    Yes  Sat  Dinner     1  0.325733
+    178        9.60  4.00    Yes  Sun  Dinner     2  0.416667
+    172        7.25  5.15    Yes  Sun  Dinner     2  0.710345
+
+
+    Now, if we group by smoker, and call 'apply' with this function, we get:
+
+    >>> tips.groupby('smoker').apply(top)
+
+                total_bill   tip smoker   day    time  size   tip_pct
+    smoker                                                           
+    No     88        24.71  5.85     No  Thur   Lunch     2  0.236746
+           185       20.69  5.00     No   Sun  Dinner     5  0.241663
+           51        10.29  2.60     No   Sun  Dinner     2  0.252672
+           149        7.51  2.00     No  Thur   Lunch     2  0.266312
+           232       11.61  3.39     No   Sat  Dinner     2  0.291990
+    Yes    109       14.31  4.00    Yes   Sat  Dinner     2  0.279525
+           183       23.17  6.50    Yes   Sun  Dinner     4  0.280535
+           67         3.07  1.00    Yes   Sat  Dinner     1  0.325733
+           178        9.60  4.00    Yes   Sun  Dinner     2  0.416667
+           172        7.25  5.15    Yes   Sun  Dinner     2  0.710345
+
+
+    Here, the 'top' function is called on each row group from the DataFrame, and the 
+      results are glued together using 'pandas.concat', labeling the pieces with the group
+      names.  
+
+    If you pass a function to 'apply' that takes other arguments, you can pass these
+      after the function:
+
+    >>> tips.groupby(['smoker', 'day']).apply(top, n=1, column='total_bill')
+ 
+                     total_bill    tip smoker   day    time  size   tip_pct
+    smoker day                                                             
+    No     Fri  94        22.75   3.25     No   Fri  Dinner     2  0.142857
+           Sat  212       48.33   9.00     No   Sat  Dinner     4  0.186220
+           Sun  156       48.17   5.00     No   Sun  Dinner     6  0.103799
+           Thur 142       41.19   5.00     No  Thur   Lunch     5  0.121389
+    Yes    Fri  95        40.17   4.73    Yes   Fri  Dinner     4  0.117750
+           Sat  170       50.81  10.00    Yes   Sat  Dinner     3  0.196812
+           Sun  182       45.35   3.50    Yes   Sun  Dinner     3  0.077178
+           Thur 197       43.11   5.00    Yes  Thur   Lunch     4  0.115982
+
+
 
 - Suppressing the Group Keys
 
