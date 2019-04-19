@@ -761,9 +761,72 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
     178        9.60  4.00    Yes   Sun  Dinner     2  0.416667
     172        7.25  5.15    Yes   Sun  Dinner     2  0.710345
 
-    
+
 
 - Quantile and Bucket Analysis
+
+    We can combine pandas tools like 'cut' and 'qcut' with 'groupby' to conveniently
+      perform buck or quantile analysis on a dataset.  
+
+
+    # Create a random dataset and cut it into equal length buckets
+    >>> frame = pd.DataFrame({'data1': np.random.randn(1000),
+                              'data2': np.random.randn(1000)})
+    >>> quartiles = pd.cut(frame.data1, 4)
+    >>> quartiles[:10]
+
+    0     (-1.23, 0.489]
+    1    (-2.956, -1.23]
+    2     (-1.23, 0.489]
+    3     (0.489, 2.208]
+    4     (-1.23, 0.489]
+    5     (0.489, 2.208]
+    6     (-1.23, 0.489]
+    7     (-1.23, 0.489]
+    8     (0.489, 2.208]
+    9     (0.489, 2.208]
+    Name: data1, dtype: category
+    Categories (4, interval[float64]): [(-2.956, -1.23] < (-1.23, 0.489] < 
+    (0.489, 2.208] < (2.208, 3.928]]
+
+
+    # The 'Categorical' object returned by 'cut' can be passed directly to 'groupby'.
+    #   So we can compute a set of statistics for the data2 column like so:
+    >>> def get_stats(group):
+            return {'min': group.min(), 'max': group.max(), 'count': group.count(), 
+                    'mean': group.mean()}
+
+    >>> grouped = frame.data2.groupby(quartiles)
+    >>> group.apply(get_stats).unstack()
+
+                     count       max      mean       min
+    data1                                               
+    (-2.956, -1.23]   95.0  1.670835 -0.039521 -3.399312
+    (-1.23, 0.489]   598.0  3.260383 -0.002051 -2.989741
+    (0.489, 2.208]   297.0  2.954439  0.081822 -3.745356
+    (2.208, 3.928]    10.0  1.765640  0.024750 -1.929776
+
+
+    # Use 'qcut' to get equal-size buckets instead, and pass 'labels=False' to just
+    #   get quantile numbers
+    >>> grouping = pd.qcut(frame.data1, 10, labels=False)
+    >>> grouped = frame.data2.groupby(grouping)
+    >>> grouped.apply(get_stats).unstack()
+
+           count       max      mean       min
+    data1                                     
+    0      100.0  1.670835 -0.049902 -3.399312
+    1      100.0  2.628441  0.030989 -1.950098
+    2      100.0  2.527939 -0.067179 -2.925113
+    3      100.0  3.260383  0.065713 -2.315555
+    4      100.0  2.074345 -0.111653 -2.047939
+    5      100.0  2.184810  0.052130 -2.989741
+    6      100.0  2.458842 -0.021489 -2.223506
+    7      100.0  2.954439 -0.026459 -3.056990
+    8      100.0  2.735527  0.103406 -3.745356
+    9      100.0  2.377020  0.220122 -2.064111
+
+
 
 - Example - Filling Missing Values with Group-Specific Values
 
