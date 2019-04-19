@@ -935,6 +935,82 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Example - Random Sampling and Permutation
 
+    Suppose we want to draw a random sample (with or without replacement) from a large
+      dataset for Monte Carlo simulation purposes.  To perform the 'draws', we can use the
+      'sample' method for Series.
+
+
+    # Construct a deck of playing cards
+    >>> suits = ['H', 'S', 'C', 'D']
+    >>> card_val = (list(range(1, 11)) + [10] * 3) * 4
+    >>> base_names = ['A'] + list(range(2, 11)) + ['J', 'K', 'Q']
+    >>> cards = []
+
+    >>> for suit in suits:
+            cards.extend(str(num) + suit for num in base_names)
+    >>> deck = pd.Series(card_val, index=cards)
+    >>> deck[:13]
+
+    AH      1
+    2H      2
+    3H      3
+    4H      4
+    5H      5
+    6H      6
+    7H      7
+    8H      8
+    9H      9
+    10H    10
+    JH     10
+    KH     10
+    QH     10
+    dtype: int64
+
+
+    # Draw a hand of 5 cards from the deck
+    >>> def draw(deck, n=5):
+            return deck.sample(n)
+
+    >>> draw(deck)
+
+    AD     1
+    8C     8
+    5H     5
+    KC    10
+    2C     2
+    dtype: int64
+
+
+    # Draw 2 random cards from each suit
+    >>> get_suit = lambda card: card[-1] # last letter is suit
+    >>> deck.groupby(get_suit).apply(draw, n=2)
+    
+    C  2C     2
+       3C     3
+    D  KD    10
+       8D     8
+    H  KH    10
+       3H     3
+    S  2S     2
+       4S     4
+    dtype: int64
+    
+
+    # Alternatively, we could write:
+    >>> deck.groupby(get_suit, group_keys=False).apply(draw, n=2)
+
+    KC    10
+    JC    10
+    AD     1
+    5D     5
+    5H     5
+    6H     6
+    7S     7
+    KS    10
+    dtype: int64
+
+
+
 - Example - Group Weighted Average and Correlation
 
 - Example - Group-Wise Linear Regression
