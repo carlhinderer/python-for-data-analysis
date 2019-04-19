@@ -1,0 +1,19 @@
+------------------------------------------------------
+CHAPTER 11 - TIME SERIES
+------------------------------------------------------
+
+- Time Series Data
+
+    Many time series are 'fixed frequency', which is to say that data points occur at
+      regular intervals according to some rule.  Time series can also be 'irregular',
+      without a fixed unit of time or offset between units.  The time series data may
+      have one of the following:
+
+      1. Timestamps = specific instants in time, this is the most widely used
+
+      2. Fixed Periods = ie the month January 2007 or the full year 2010
+
+      3. Intervals of Time = indicated by start and end timestamps, periods are a 
+                             special case of intervals
+
+      4. Elapsed Time = each timestamp is a measure relative to a particular start time
