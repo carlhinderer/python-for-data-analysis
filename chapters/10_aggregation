@@ -830,6 +830,109 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Example - Filling Missing Values with Group-Specific Values
 
+    Sometimes we want to drop mising data with 'dropna', and in other we want to fill
+      it in using 'fillna'.  
+
+    # Fill in missing values with the mean
+    >>> s = pd.Series(np.random.randn(6))
+    >>> s[::2] = np.nan
+    >>> s
+
+    0         NaN
+    1   -0.125921
+    2         NaN
+    3   -0.884475
+    4         NaN
+    5    0.227290
+    dtype: float64
+    
+    >>> s.fillna(s.mean())
+
+    0   -0.261035
+    1   -0.125921
+    2   -0.261035
+    3   -0.884475
+    4   -0.261035
+    5    0.227290
+    dtype: float64
+
+
+    Suppose we want the fill value to vary by group.  One way to do this is to use 'apply'
+      with a function that calls 'fillna' on each data chunk.  Here is some sample data on
+      US states divided into eastern and western regions.
+
+    >>> states = ['Ohio', 'New York', 'Vermont', 'Florida', 
+                  'Oregon', 'Nevada', 'California', 'Idaho']
+    >>> group_key = ['East'] * 4 + ['West'] * 4
+    >>> data = pd.Series(np.random.randn(8), index=states)
+    >>> data
+
+    Ohio          0.922264
+    New York     -2.153545
+    Vermont      -0.365757
+    Florida      -0.375842
+    Oregon        0.329939
+    Nevada        0.981994
+    California    1.105913
+    Idaho        -1.613716
+    dtype: float64
+
+
+    # Now, let's set some values in the data to be missing
+    >>> data[['Vermont', 'Nevada', 'Idaho']] = np.nan
+    >>> data
+
+    Ohio          0.922264
+    New York     -2.153545
+    Vermont            NaN
+    Florida      -0.375842
+    Oregon        0.329939
+    Nevada             NaN
+    California    1.105913
+    Idaho              NaN
+    dtype: float64
+    
+    >>> data.groupby(group_key).mean()
+    
+    East   -0.535707
+    West    0.717926
+    dtype: float64
+    
+    
+    # We can fill the NA values using the group means like so:
+    >>> fill_mean = lambda g: g.fillna(g.mean())
+    >>> data.groupby(group_key).apply(fill_mean)
+    
+    Ohio          0.922264
+    New York     -2.153545
+    Vermont      -0.535707
+    Florida      -0.375842
+    Oregon        0.329939
+    Nevada        0.717926
+    California    1.105913
+    Idaho         0.717926
+    dtype: float64
+
+
+    In another case, we might have predefined fill values in our code that vary by group.
+      Since the groups have a 'name' attribute set internally, we can use that.
+
+    >>> fill_values = {'East': 0.5, 'West': -1}
+    >>> fill_func = lambda g: g.fillna(fill_values[g.name])
+    >>> data.groupby(group_key).apply(fill_func)
+
+    Ohio          0.922264
+    New York     -2.153545
+    Vermont       0.500000
+    Florida      -0.375842
+    Oregon        0.329939
+    Nevada       -1.000000
+    California    1.105913
+    Idaho        -1.000000
+    dtype: float64
+
+
+
 - Example - Random Sampling and Permutation
 
 - Example - Group Weighted Average and Correlation
