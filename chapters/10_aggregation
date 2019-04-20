@@ -1291,3 +1291,49 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 
 - Cross-Tabulations
+
+    A 'crosstab' is a special case of pivot table that computes group frequencies.
+    
+    # Sample data
+    >>> data
+
+       Sample Nationality    Handedness
+    0       1         USA  Right-handed
+    1       2       Japan   Left-handed
+    2       3         USA  Right-handed
+    3       4       Japan  Right-handed
+    4       5       Japan   Left-handed
+    5       6       Japan  Right-handed
+    6       7         USA  Right-handed
+    7       8         USA   Left-handed
+    8       9       Japan  Right-handed
+    9      10         USA  Right-handed
+
+
+    As part of some survey analysis, we might want to summarize this data by nationality
+      and handedness.  We could use 'pivot_table' to do this, but the 'pandas.crosstab'
+      function can be more convenient.
+
+    >>> pd.crosstab(data.Nationality, data.Handedness, margins=True)
+
+    Handedness   Left-handed  Right-handed  All
+    Nationality                                
+    Japan                  2             3    5
+    USA                    1             4    5
+    All                    3             7   10
+
+
+    The first 2 arguments to 'crosstab' can each either be an array or Series or list 
+      of arrays.  
+
+    >>> pd.crosstab([tips.time, tips.day], tips.smoker, margins=True)
+
+    smoker        No  Yes  All
+    time   day                
+    Dinner Fri     3    9   12
+           Sat    45   42   87
+           Sun    57   19   76
+           Thur    1    0    1
+    Lunch  Fri     1    6    7
+           Thur   44   17   61
+    All          151   93  244    
