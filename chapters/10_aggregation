@@ -1156,6 +1156,138 @@ CHAPTER 10 - DATA AGGREGATION AND GROUP OPERATIONS
 
 - Pivot Tables and Cross-Tabulation
 
+    A 'pivot table' is a data summarization tool frequently found in spreadsheet programs
+      and other data analysis software.  It aggregates a table of data by one or more keys,
+      arranging the data in a matrix with some keys along the rows and some keys along
+      the columns.
+
+    Pivot tables in pandas are made possible by the 'groupby' facility combined with
+      reshaping operations using hierarchical indexing.  DataFrame has a 'pivot_table'
+      method, and there is also a top-level 'pandas.pivot_table' function.  'pivot_table'
+      can also add partial totals, known as 'margins'.
+
+
+    # Here, we once again load the tipping dataset and create a pivot table arranged by
+    #   day and smoker on the rows.  Note that we could have done this by just using
+    #   'groupby' directly.
+    >>> tips.pivot_table(index=['day', 'smoker'])
+
+                     size       tip   tip_pct  total_bill
+    day  smoker                                          
+    Fri  No      2.250000  2.812500  0.151650   18.420000
+         Yes     2.066667  2.714000  0.174783   16.813333
+    Sat  No      2.555556  3.102889  0.158048   19.661778
+         Yes     2.476190  2.875476  0.147906   21.276667
+    Sun  No      2.929825  3.167895  0.160113   20.506667
+         Yes     2.578947  3.516842  0.187250   24.120000
+    Thur No      2.488889  2.673778  0.160298   17.113111
+         Yes     2.352941  3.030000  0.163863   19.190588
+
+
+    # Now, suppose we only want to aggregate 'tip_pct' and 'size', and additionally group by
+    #   'time'.  We'll put 'smoker' in the table columns and 'day' in the rows.
+
+    >>> tips.pivot_table(['tip_pct', 'size'], index=['time', 'day'], columns='smoker')
+
+                     size             tip_pct          
+    smoker             No       Yes        No       Yes
+    time   day                                         
+    Dinner Fri   2.000000  2.222222  0.139622  0.165347
+           Sat   2.555556  2.476190  0.158048  0.147906
+           Sun   2.929825  2.578947  0.160113  0.187250
+           Thur  2.000000       NaN  0.159744       NaN
+    Lunch  Fri   3.000000  1.833333  0.187735  0.188937
+           Thur  2.500000  2.352941  0.160311  0.163863
+
+
+    # We could augment this table to include partial totals by passing 'margins=True'.  This
+    #   has the effect of adding all row and column labels, with corresponding values being 
+    #   the group statistics for all the data within a single tier.
+
+    >>> tips.pivot_table(['tip_pct', 'size'], index=['time', 'day'],
+                         columns='smoker', margins=True)
+
+                     size                       tip_pct                    
+    smoker             No       Yes       All        No       Yes       All
+    time   day                                                             
+    Dinner Fri   2.000000  2.222222  2.166667  0.139622  0.165347  0.158916
+           Sat   2.555556  2.476190  2.517241  0.158048  0.147906  0.153152
+           Sun   2.929825  2.578947  2.842105  0.160113  0.187250  0.166897
+           Thur  2.000000       NaN  2.000000  0.159744       NaN  0.159744
+    Lunch  Fri   3.000000  1.833333  2.000000  0.187735  0.188937  0.188765
+           Thur  2.500000  2.352941  2.459016  0.160311  0.163863  0.161301
+    All          2.668874  2.408602  2.569672  0.159328  0.163196  0.160803
+
+
+    # To use a different aggregation function, pass it to 'aggfunc'.  For example, 'count'
+    #   or 'len' will give you a frequency of group sizes.
+
+    >>> tips.pivot_table('tip_pct', index=['time', 'smoker'], columns='day',
+                         aggfunc=len, margins=True)
+
+    day             Fri   Sat   Sun  Thur    All
+    time   smoker                               
+    Dinner No       3.0  45.0  57.0   1.0  106.0
+           Yes      9.0  42.0  19.0   NaN   70.0
+    Lunch  No       1.0   NaN   NaN  44.0   45.0
+           Yes      6.0   NaN   NaN  17.0   23.0
+    All            19.0  87.0  76.0  62.0  244.0
+
+
+    # If some columns are empty, we may wish to pass a 'fill_value'
+
+    >>> tips.pivot_table('tip_pct', index=['time', 'size', 'smoker'], columns=day,
+                         aggfunc='mean', fill_value=0)
+
+    day                      Fri       Sat       Sun      Thur
+    time   size smoker                                        
+    Dinner 1    No      0.000000  0.137931  0.000000  0.000000
+                Yes     0.000000  0.325733  0.000000  0.000000
+           2    No      0.139622  0.162705  0.168859  0.159744
+                Yes     0.171297  0.148668  0.207893  0.000000
+           3    No      0.000000  0.154661  0.152663  0.000000
+                Yes     0.000000  0.144995  0.152660  0.000000
+           4    No      0.000000  0.150096  0.148143  0.000000
+                Yes     0.117750  0.124515  0.193370  0.000000
+           5    No      0.000000  0.000000  0.206928  0.000000
+                Yes     0.000000  0.106572  0.065660  0.000000
+    ...                      ...       ...       ...       ...
+    Lunch  1    No      0.000000  0.000000  0.000000  0.181728
+                Yes     0.223776  0.000000  0.000000  0.000000
+           2    No      0.000000  0.000000  0.000000  0.166005
+                Yes     0.181969  0.000000  0.000000  0.158843
+           3    No      0.187735  0.000000  0.000000  0.084246
+                Yes     0.000000  0.000000  0.000000  0.204952
+           4    No      0.000000  0.000000  0.000000  0.138919
+                Yes     0.000000  0.000000  0.000000  0.155410
+           5    No      0.000000  0.000000  0.000000  0.121389
+           6    No      0.000000  0.000000  0.000000  0.173706
+    [21 rows x 4 columns]
+
+
+
 - List of pivot_table Options
+
+    Function Name            Description
+    ----------------------------------------------------------------------------------
+    values                   Column name or names to aggregate; by default aggregates all 
+                               numeric columns
+
+    index                    Column names or other group keys to group on the rows of the 
+                               resulting pivot table
+
+    columns                  Column names or other group keys to group on the columns of the 
+                               resulting pivot table
+
+    aggfunc                  Aggregation function or list of functions ('mean' by default); can 
+                               be any function valid in a groupby context
+
+    fill_value               Replace missing values in result table
+
+    dropna                   If True, do not include columns whose entries are all NA
+
+    margins                  Add row/column subtotals and grand total (False by default)
+
+
 
 - Cross-Tabulations
