@@ -206,3 +206,50 @@ CHAPTER 11 - TIME SERIES
               May 1, 2012 yields ’05/01/2012’)
 
     %X	    Locale-appropriate time (e.g., ’04:24:12 PM’)
+
+
+
+- Time Series Basics
+
+    A basic kind of time series in pandas is a Series indexed by timestamps, which is
+      often represented external to pandas as Python strings or 'datetime' objects.
+
+
+    # Create a time series object
+    >>> from datetime import datetime
+    >>> dates = [datetime(2011, 1, 2), datetime(2011, 1, 5), datetime(2011, 1, 7), 
+                 datetime(2011, 1, 8), datetime(2011, 1, 10), datetime(2011, 1, 12)]
+
+    >>> ts = pd.Series(np.random.randn(6), index=dates)
+    >>> ts
+
+    2011-01-02   -0.204708
+    2011-01-05    0.478943
+    2011-01-07   -0.519439
+    2011-01-08   -0.555730
+    2011-01-10    1.965781
+    2011-01-12    1.393406
+    dtype: float64
+
+
+    # Under the hood, these 'datetime' objects have been put in a 'DatetimeIndex'
+    >>> ts.index
+    DatetimeIndex(['2011-01-02', '2011-01-05', '2011-01-07', 
+                   '2011-01-08', '2011-01-10', '2011-01-12'],
+                  dtype='datetime64[ns]', freq=None)
+
+
+    # Like any other Series, arithmetic operations between differently indexed time series
+    #   automatically align on the dates.
+    >>> ts + ts[::2]
+
+    2011-01-02   -0.409415
+    2011-01-05         NaN
+    2011-01-07   -1.038877
+    2011-01-08         NaN
+    2011-01-10    3.931561
+    2011-01-12         NaN
+    dtype: float64
+
+
+    # 
