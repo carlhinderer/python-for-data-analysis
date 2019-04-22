@@ -252,4 +252,161 @@ CHAPTER 11 - TIME SERIES
     dtype: float64
 
 
-    # 
+    # pandas stores timestamps using NumPy's 'datetime64' data type at the ns resolution
+    >>> ts.index.dtype
+    dtype('<M8[ns]')
+
+
+    # Scalar values from a DatetimeIndex are pandas Timestamp objects.
+    >>> stamp = ts.index[0]
+    >>> stamp
+    Timestamp('2011-01-02 00:00:00')
+
+
+    A Timestamp can be substituted anywhere you would use a datetime object. Additionally, 
+      it can store frequency information (if any) and understands how to do time zone 
+      conversions and other kinds of manipulations.
+
+
+
+- Indexing, Selection, and Subsetting
+
+    Time series behaves like any other Series object when indexing and select data by 
+      label.  
+
+    >>> stamp = ts.index[2]
+    >>> ts[stamp]
+    -0.51943871505673811
+
+
+    # As a convenience, you can also pass a string that is interpretable as a date.
+    >>> ts['1/10/2011']
+    1.9657805725027142
+
+    >>> ts['20110110']
+    1.9657805725027142
+
+
+    # For longer time series, a year or only a year and month can be passed to 
+    #   easily select slices of data.
+
+    >>> longer_ts = pd.Series(np.random.randn(1000), 
+                              index=pd.date_range('1/1/2000', periods=1000))
+    >>> longer_ts
+
+    2000-01-01    0.092908
+    2000-01-02    0.281746
+    2000-01-03    0.769023
+    2000-01-04    1.246435
+    2000-01-05    1.007189
+    2000-01-06   -1.296221
+    2000-01-07    0.274992
+    2000-01-08    0.228913
+    2000-01-09    1.352917
+    2000-01-10    0.886429
+                    ...
+    2002-09-17   -0.139298
+    2002-09-18   -1.159926
+    2002-09-19    0.618965
+    2002-09-20    1.373890
+    2002-09-21   -0.983505
+    2002-09-22    0.930944
+    2002-09-23   -0.811676
+    2002-09-24   -1.830156
+    2002-09-25   -0.138730
+    2002-09-26    0.334088
+    Freq: D, Length: 1000, dtype: float64
+    
+
+    # Here, the string '2001' is interpreted as a year and selects the time period
+    >>> longer_ts['2001']
+
+    2001-01-01    1.599534
+    2001-01-02    0.474071
+    2001-01-03    0.151326
+    2001-01-04   -0.542173
+    2001-01-05   -0.475496
+    2001-01-06    0.106403
+    2001-01-07   -1.308228
+    2001-01-08    2.173185
+    2001-01-09    0.564561
+    2001-01-10   -0.190481
+                    ...   
+    Freq: D, Length: 365, dtype: float64
+
+
+    # This also works if we specify the month
+    >>> longer_ts['2001-05']
+
+    2001-05-01   -0.622547
+    2001-05-02    0.936289
+    2001-05-03    0.750018
+    2001-05-04   -0.056715
+    2001-05-05    2.300675
+    2001-05-06    0.569497
+    2001-05-07    1.489410
+    2001-05-08    1.264250
+    2001-05-09   -0.761837
+    2001-05-10   -0.331617
+                    ...
+    Freq: D, Length: 31, dtype: float64
+
+
+
+- Slicing With Datetimes and Timestamps
+
+    # Slicing with datetime objects works as well
+    >>> ts[datetime(2011, 1, 7):]
+
+    2011-01-07   -0.519439
+    2011-01-08   -0.555730
+    2011-01-10    1.965781
+    2011-01-12    1.393406
+    dtype: float64
+    
+
+    # Because most time series data is ordered chronologically, you can slice with 
+    #   timestamps not contained in a time series to perform a range query.
+    >>> ts
+
+    2011-01-02   -0.204708
+    2011-01-05    0.478943
+    2011-01-07   -0.519439
+    2011-01-08   -0.555730
+    2011-01-10    1.965781
+    2011-01-12    1.393406
+    dtype: float64
+    
+    >>> ts['1/6/2011':'1/11/2011']
+
+    2011-01-07   -0.519439
+    2011-01-08   -0.555730
+    2011-01-10    1.965781
+    dtype: float64
+
+
+    # The instance method 'truncate' has additional options for slicing a Series 
+    #   between 2 dates
+    >>> ts.truncate(after='1/9/2011')
+
+    2011-01-02   -0.204708
+    2011-01-05    0.478943
+    2011-01-07   -0.519439
+    2011-01-08   -0.555730
+    dtype: float64
+
+
+    # All of this holds true for DataFrame as well, indexing on its rows
+    >>> dates = pd.date_range('1/1/2000', periods=100, freq='W-WED')
+    >>> long_df = pd.DataFrame(np.random.randn(100, 4), 
+                               index=dates,
+                               columns=['Colorado', 'Texas', 'New York', 'Ohio'])
+
+    >>> long_df.loc['5-2001']
+
+                Colorado     Texas  New York      Ohio
+    2001-05-02 -0.006045  0.490094 -0.277186 -0.707213
+    2001-05-09 -0.560107  2.735527  0.927335  1.513906
+    2001-05-16  0.538600  1.273768  0.667876 -0.969206
+    2001-05-23  1.676091 -0.817649  0.050188  1.951312
+    2001-05-30  3.260383  0.963301  1.201206 -1.852001
