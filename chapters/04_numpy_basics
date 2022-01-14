@@ -13,7 +13,7 @@ CHAPTER 04 - NUMPY BASICS
       and also an equivalent Python list.
 
     >>> import numpy as np
-    >>> my_arr = np.arrange(1000000)
+    >>> my_arr = np.arange(1000000)
     >>> my_list = list(range(1000000))
 
     Now, lets multiply each sequence by 2:
@@ -235,7 +235,7 @@ CHAPTER 04 - NUMPY BASICS
     array([0, 1, 2, 3, 4, 100, 100, 100, 8, 9])
 
     # To get a copy in a slice instead
-    >>> slice = arr[5:8].copy
+    >>> slice = arr[5:8].copy()
 
 
     # With higher dimensional arrays, the elements at each index are arrays 
@@ -288,7 +288,7 @@ CHAPTER 04 - NUMPY BASICS
 - Indexing With Slices
 
     # Slicing a 2D array
-    >>> arr2d = np.array([1, 2, 3], [4, 5, 6], [7, 8, 9])
+    >>> arr2d = np.array(([1, 2, 3], [4, 5, 6], [7, 8, 9]))
     >>> arr2d[:2]
     array([[1, 2, 3],
            [4, 5, 6]])
@@ -729,7 +729,7 @@ CHAPTER 04 - NUMPY BASICS
 
     # Create 2 arrays to multiply
     >>> x = np.array([[1., 2., 3.], [4., 5., 6.]])
-    >>> y = y = np.array([[6., 23.], [-1, 7], [8, 9]])
+    >>> y = np.array([[6., 23.], [-1, 7], [8, 9]])
 
     # Get their dot product
     >>> x.dot(y)

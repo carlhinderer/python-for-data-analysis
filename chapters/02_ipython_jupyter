@@ -15,7 +15,7 @@ CHAPTER 02 - IPYTHON AND JUPYTER
         In [3]: print?
 
 
-    - Using '??' will show a function's source code if posible
+    - Using '??' will show a function's source code if possible
 
         In [4]: add_numbers??
 
@@ -74,7 +74,7 @@ CHAPTER 02 - IPYTHON AND JUPYTER
     %prun statement	      Execute statement with cProfile and report the profiler output
     %time statement	      Report the execution time of a single statement
     %timeit statement	  Run a statement multiple times to compute an ensemble average execution time
-    %who, %who_ls, %whos  Display variables defined in interactive namespace
+    %who, %who_ls, %whos  Display variables defined in interactive namespace%
     %xdel variable	      Delete a variable and attempt to clear any references to the object
 
 

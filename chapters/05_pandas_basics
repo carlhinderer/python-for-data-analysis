@@ -182,16 +182,16 @@ CHAPTER 05 - PANDAS BASICS
     # Columns in the DataFrame can be retrieved as a Series by attribute
     >>> frame['state']
     >>> frame.state
-    one        Ohio
-    two        Ohio
-    three      Ohio
-    four     Nevada
-    five     Nevada
-    six      Nevada
+    1     Ohio
+    2     Ohio
+    3     Ohio
+    4     Nevada
+    5     Nevada
+    6     Nevada
     Name: state, dtype: object
 
     # Rows can be retrieved either by position or with the 'loc' attribute
-    >>> frame.loc['three']
+    >>> frame.loc[3]
     year     2002
     state    Ohio
     pop       3.6
@@ -592,7 +592,7 @@ CHAPTER 05 - PANDAS BASICS
     Name: Utah, dtype: int64
 
     # Select a single row with columns
-    >>> data.iloc[2, [3, 0, 1] 
+    >>> data.iloc[2, [3, 0, 1]]
 
     four    11
     one      8
@@ -761,7 +761,7 @@ CHAPTER 05 - PANDAS BASICS
 
     # Adding the DataFrames returns a DataFrame whose index and columns are the unions
     #   of the ones in each DataFrame.
-    >>> d1 + d2
+    >>> df1 + df2
 
                 b   c     d   e
     Colorado  NaN NaN   NaN NaN
@@ -778,10 +778,10 @@ CHAPTER 05 - PANDAS BASICS
       fill all the NaN spaces with a special value like 0.
 
     # Add, while filling the NaN spaces with 0
-    >>> d1.add(d2, fill_value=0)
+    >>> df1.add(df2, fill_value=0)
 
     # Can also fill values when reindexing
-    >>> d1.reindex(columns=d2.columns, fill_value=0)
+    >>> df1.reindex(columns=df2.columns, fill_value=0)
 
 
     Here is a list of flexible arithmetic methods:
@@ -918,7 +918,7 @@ CHAPTER 05 - PANDAS BASICS
       ties by assigning each tied group the mean rank.
 
     # Rank a series
-    >>> obj pd.Series([7, -5, 7, 4, 2, 0, 4])
+    >>> obj = pd.Series([7, -5, 7, 4, 2, 0, 4])
     >>> obj.rank()
 
     0    6.5
